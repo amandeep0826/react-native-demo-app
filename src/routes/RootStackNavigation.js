@@ -29,14 +29,16 @@ const RootStackNavigation = () => {
         <>
           <Stack.Screen name="DriverLogin" component={DriverLoginScreen} />
           <Stack.Screen name="ForgotPassword" component={ForgotPassword} />
-          <Stack.Screen name="DummyScreen" component={DummyScreen} />
           <Stack.Screen
             name="DriverSignupScreen"
             component={DriverSignupScreen}
           />
         </>
       ) : (
-        <Stack.Screen name="TabNavigation" component={TabNavigation} />
+        <>
+          <Stack.Screen name="TabNavigation" component={TabNavigation} />
+          <Stack.Screen name="DummyScreen" component={DummyScreen} />
+        </>
       )}
     </Stack.Navigator>
   );

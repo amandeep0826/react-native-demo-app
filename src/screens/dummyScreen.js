@@ -1,7 +1,11 @@
 import React from 'react';
 import {View, Text} from 'react-native';
 
-const DummyScreen = () => {
+const DummyScreen = props => {
+  const JobDetails = props.route.params.item;
+
+  console.log(JobDetails);
+
   return (
     <View style={{flex: 1}}>
       <Text>Logged in successfully.</Text>
@@ -9,4 +13,4 @@ const DummyScreen = () => {
   );
 };
 
-export default DummyScreen
+export default DummyScreen;

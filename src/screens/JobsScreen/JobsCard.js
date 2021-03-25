@@ -14,40 +14,73 @@ import api, {AcceptDelivery, getHeaders, getToken} from '../../api/api';
 
 const {width, height} = Dimensions.get('window');
 
-export default function JobsCard({item}) {
+export default function JobsCard({item, onPress}) {
+  // const [headers, setHeaders] = useState(null);
+
+  // useEffect(() => {
+  //   const fetchHeader = async () => {
+  //     const _headers = await getHeaders();
+  //     setHeaders(_headers);
+  //   };
+  //   fetchHeader();
+  // }, []);
+
+  // const acceptDeliveryHandler = _headers => {
+  //   api
+  //     .put(AcceptDelivery, {
+  //       headers: _headers,
+  //     })
+  //     .then(response => {
+  //       navigation.navigate('DummyScreen');
+  //     })
+  //     .catch(error => {
+  //       console.log({error});
+  //       console.log(_headers);
+  //     });
+  // };
+
   const [headers, setHeaders] = useState(null);
 
   useEffect(() => {
     const fetchHeader = async () => {
       const _headers = await getHeaders();
       setHeaders(_headers);
-      getDeliveriesFromAPI(_headers);
     };
     fetchHeader();
   }, []);
 
-  const acceptDeliveryHandler = () => {
+  function acceptDeliveryHandler() {
     api
-      .put(AcceptDelivery, {
-        headers: {
-          'Content-type': 'application/json',
-          accept: 'application/json',
-          Authorization:
-            'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6eyJpZCI6MTEsImFwcF92ZXJzaW9uIjoxfSwiaWF0IjoxNjE2NTkwNzUwfQ.JdLewnAVsC0ljVMSE1vltmx_yrV91y2CAFjw00bQrLU',
+      .put(
+        AcceptDelivery,
+        {
+          delivery_id: 0,
+          job_type: 0,
+          pickup_time: 'string',
+          estimated_time: 0,
         },
-      })
+        {
+          headers: headers,
+        },
+      )
       .then(response => {
-        navigation.navigate('DummyScreen');
+        // console.log({response});
+        alert('Delivery accepted successfully.');
       })
       .catch(error => {
-        console.log(error);
+        console.log({error});
+        // console.log({headers});
       });
-  };
+  }
 
-  // console.log(headers);
+  // console.log(_headers);
 
   return (
-    <View style={styles.cardView}>
+    <TouchableOpacity
+      style={styles.cardView}
+      onPress={() => {
+        onPress();
+      }}>
       <View style={styles.topContainer}>
         {/* <Image style={styles.image}/> */}
         <Image
@@ -147,7 +180,7 @@ export default function JobsCard({item}) {
         }}>
         <Text style={styles.acceptButtonText}>ACCEPT</Text>
       </TouchableOpacity>
-    </View>
+    </TouchableOpacity>
   );
 }
 

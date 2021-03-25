@@ -14,7 +14,7 @@ import JobsCard from './JobsCard';
 import styles from './style';
 import {primarycolor, primarybackgroundColor} from '../../assets/colors';
 
-const JobScreen = ({navigation}) => {
+const JobScreen = ({navigation, ...props}) => {
   const [deliveriesJobs, setDeliveriesJobs] = useState('');
   const [headers, setHeaders] = useState(null);
 
@@ -57,6 +57,9 @@ const JobScreen = ({navigation}) => {
     );
   }
 
+  // console.log(props);
+  // console.log({navigation});
+
   return (
     <View style={backgroundColor.mainContainer}>
       <View style={styles.jobsHeader}>
@@ -87,18 +90,24 @@ const JobScreen = ({navigation}) => {
             data={deliveriesJobs.deliveries}
             keyExtractor={(item, index) => 'key' + index}
             renderItem={({item}) => {
-              return <JobsCard item={item} />;
+              return (
+                <JobsCard
+                  onPress={() => {
+                    navigation.navigate('DummyScreen', {item});
+                  }}
+                  item={item}
+                />
+              );
             }}
           />
           {/* <TouchableOpacity style={styles.acceptButtonContainer}>
             <Text style={styles.acceptButtonText}>ACCEPT</Text>
+
+            const JobDetails = props.route.params.item
+
           </TouchableOpacity> */}
         </View>
-        {/* <View style={styles.spaceBetweenContainer}></View> */}
       </View>
-      {/* <TouchableOpacity style={styles.acceptButtonContainer}>
-        <Text style={styles.acceptButtonText}>ACCEPT</Text>
-      </TouchableOpacity> */}
     </View>
   );
 };
