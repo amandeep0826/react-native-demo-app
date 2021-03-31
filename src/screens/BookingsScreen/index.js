@@ -7,7 +7,7 @@ import {
   Dimensions,
 } from 'react-native';
 import {backgroundColor} from '../../styles/commonStyle';
-import {NunitoFont} from '../../assets/nunitoFont';
+import {NunitoFont} from '../../assets/fonts/nunitoFont';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 const {width, height} = Dimensions.get('window');

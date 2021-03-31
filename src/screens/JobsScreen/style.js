@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {NunitoFont} from '../../assets/nunitoFont';
+import {NunitoFont} from '../../assets/fonts/nunitoFont';
 
 export default styles = StyleSheet.create({
   mainLogo: {
@@ -79,6 +79,133 @@ export default styles = StyleSheet.create({
     marginTop: 18,
     height: 43,
     // marginBottom: -20,
+  },
+  acceptButtonText: {
+    fontSize: 14,
+    color: 'white',
+    alignSelf: 'center',
+    textTransform: 'uppercase',
+    fontFamily: 'Nunito-Regular',
+    fontWeight: 'bold',
+  },
+  cardView: {
+    width: 335,
+    backgroundColor: '#FFF6C7',
+    shadowColor: '#DFAF0080',
+    shadowOpacity: 10,
+    alignSelf: 'center',
+    borderRadius: 6,
+    marginBottom: 41,
+  },
+  topContainer: {
+    flexDirection: 'row',
+    marginBottom: 15,
+  },
+  nameContainer: {
+    marginLeft: 10,
+    marginTop: 20,
+  },
+  chargesContainer: {
+    marginLeft: 55,
+    marginTop: 20,
+  },
+  johnDoeText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    fontFamily: NunitoFont,
+  },
+  singleDeliveryText: {
+    fontSize: 14,
+    fontFamily: NunitoFont,
+    marginTop: 4,
+  },
+  chargesText: {
+    fontSize: 16,
+    fontWeight: 'bold',
+    fontFamily: NunitoFont,
+  },
+  timeFlexibleText: {
+    fontSize: 14,
+    fontFamily: NunitoFont,
+    marginTop: 4,
+  },
+  middleContainer: {
+    flexDirection: 'row',
+    marginTop: -15,
+    marginBottom: 15,
+  },
+  pickUpDateText: {
+    marginLeft: 20,
+    marginTop: 31,
+    color: '#404040',
+    fontSize: 12,
+    fontFamily: NunitoFont,
+  },
+  pickUpDate: {
+    color: '#000000',
+    fontSize: 14,
+    marginLeft: 20,
+    marginTop: 3,
+    fontFamily: NunitoFont,
+    fontWeight: 'bold',
+  },
+  pickUpTimeText: {
+    marginLeft: 134,
+    marginTop: 31,
+    color: '#404040',
+    fontSize: 12,
+    fontFamily: NunitoFont,
+  },
+  pickUpTime: {
+    color: '#000000',
+    fontSize: 14,
+    marginLeft: 134,
+    marginTop: 3,
+    fontFamily: NunitoFont,
+    fontWeight: 'bold',
+  },
+  bottomContainer: {},
+  pickupPointText: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    fontFamily: NunitoFont,
+    marginTop: 29,
+    marginLeft: 13,
+  },
+  dropoffPointText: {
+    fontSize: 14,
+    fontWeight: 'bold',
+    fontFamily: NunitoFont,
+    marginTop: 29,
+    marginLeft: 13,
+  },
+  pickupPoint: {
+    color: '#009957',
+    marginLeft: 51,
+    marginRight: 52,
+    fontSize: 14,
+    fontFamily: NunitoFont,
+    marginTop: 2,
+  },
+  dropoffPoint: {
+    color: '#0031A3',
+    marginLeft: 51,
+    marginRight: 52,
+    fontSize: 14,
+    fontFamily: NunitoFont,
+    marginTop: 2,
+  },
+  acceptButtonContainer: {
+    elevation: 3,
+    backgroundColor: '#FF148E',
+    borderRadius: 4,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    width: 295,
+    alignSelf: 'center',
+    marginTop: 18,
+    height: 43,
+    marginBottom: -20,
   },
   acceptButtonText: {
     fontSize: 14,

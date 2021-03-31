@@ -93,7 +93,7 @@ const JobScreen = ({navigation, ...props}) => {
               return (
                 <JobsCard
                   onPress={() => {
-                    navigation.navigate('DummyScreen', {item});
+                    navigation.navigate('JobsDetailScreen', {item});
                   }}
                   item={item}
                 />

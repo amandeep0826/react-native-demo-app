@@ -1,9 +1,10 @@
 import {StyleSheet} from 'react-native';
+import {primarybackgroundColor} from '../assets/colors';
 
 export const backgroundColor = StyleSheet.create({
   container: {
-    backgroundColor: '#FFDE67',
-    height: 1248,
+    backgroundColor: primarybackgroundColor,
+    flex: 1,
   },
   mainContainer: {
     flex: 1,

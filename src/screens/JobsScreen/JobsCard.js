@@ -7,7 +7,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {NunitoFont} from '../../assets/nunitoFont';
+import {NunitoFont} from '../../assets/fonts/nunitoFont';
 import {DeliveryTitleComponent} from './DeliveryTItleComponent';
 import {OrderTitleComponent} from './OrderTitleComponent';
 import api, {AcceptDelivery, getHeaders, getToken} from '../../api/api';
@@ -186,8 +186,6 @@ export default function JobsCard({item, onPress}) {
 
 const styles = StyleSheet.create({
   cardView: {
-    // height: height / 2,
-    // height: 355,
     width: 335,
     backgroundColor: '#FFF6C7',
     shadowColor: '#DFAF0080',

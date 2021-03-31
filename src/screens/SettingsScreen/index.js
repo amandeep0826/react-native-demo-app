@@ -10,7 +10,7 @@ import {
 import {backgroundColor} from '../../styles/commonStyle';
 import {DriverProfile, removeToken, getHeaders, ContactUs} from '../../api/api';
 import {secondarybackgroundColor} from '../../assets/colors';
-import {NunitoFont} from '../../assets/nunitoFont';
+import {NunitoFont} from '../../assets/fonts/nunitoFont';
 import api from '../../api/api';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
@@ -106,6 +106,9 @@ const SettingsScreen = ({navigation}) => {
             name="pencil-plus"
             size={24}
             color="#0031A3"
+            onPress={() => {
+              navigation.navigate('EditProfileScreen');
+            }}
           />
         </View>
         <Text style={styles.phone}>{driverProfile.phone}</Text>
