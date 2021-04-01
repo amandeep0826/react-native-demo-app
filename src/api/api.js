@@ -32,8 +32,8 @@ export const getHeaders = async () => {
   const token = await getToken();
   return {accept: 'application/json', Authorization: token};
 };
-export const Deliveries =
-  'driver/deliveries?status=1&sorting=1&page=1&limit=10';
+export const Deliveries = sorting =>
+  `driver/deliveries?status=1&sorting=${sorting}&page=1&limit=10`;
 export default axios.create({
   baseURL: 'https://app-transfer.com:3001/api/',
 });

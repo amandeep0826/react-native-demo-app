@@ -11,19 +11,19 @@ const DriverSignupScreen = ({navigation}) => {
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
 
-  const nameHandler = (name) => {
+  const nameHandler = name => {
     setName(name);
   };
 
-  const phoneNumberHandler = (phoneNumber) => {
+  const phoneNumberHandler = phoneNumber => {
     setPhoneNumber(phoneNumber);
   };
 
-  const emailHandler = (email) => {
+  const emailHandler = email => {
     setEmail(email);
   };
 
-  const messageHandler = (message) => {
+  const messageHandler = message => {
     setMessage(message);
   };
 
@@ -50,17 +50,17 @@ const DriverSignupScreen = ({navigation}) => {
           },
         },
       )
-      .then((response) => {
+      .then(response => {
         navigation.navigate('DummyScreen');
       })
-      .catch((error) => {
+      .catch(error => {
         console.log(error);
       });
   };
 
   return (
     <View style={backgroundColor.container}>
-      <View style={{marginTop: 40, marginLeft: 20}}>
+      <View style={{marginLeft: 20}}>
         <Text style={styles.becomeDriverText}>Become a Driver</Text>
         <Text style={styles.sendInfoText}>
           Please send your personal information.
@@ -75,7 +75,7 @@ const DriverSignupScreen = ({navigation}) => {
             style={styles.inputStyle}
             placeholder="Enter your name"
             placeholderTextColor={placeholderTextColor}
-            onChangeText={(name) => {
+            onChangeText={name => {
               nameHandler(name);
             }}
           />
@@ -88,7 +88,7 @@ const DriverSignupScreen = ({navigation}) => {
             style={styles.inputStyle}
             placeholder="Enter your number"
             placeholderTextColor={placeholderTextColor}
-            onChangeText={(phoneNumber) => {
+            onChangeText={phoneNumber => {
               phoneNumberHandler(phoneNumber);
             }}
           />
@@ -101,7 +101,7 @@ const DriverSignupScreen = ({navigation}) => {
             style={styles.inputStyle}
             placeholder="Enter your email"
             placeholderTextColor={placeholderTextColor}
-            onChangeText={(email) => {
+            onChangeText={email => {
               emailHandler(email);
             }}
           />
@@ -114,7 +114,7 @@ const DriverSignupScreen = ({navigation}) => {
             style={styles.typeMessageInput}
             placeholder="Please type message..."
             placeholderTextColor={placeholderTextColor}
-            onChangeText={(message) => {
+            onChangeText={message => {
               messageHandler(message);
             }}
           />

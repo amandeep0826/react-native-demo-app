@@ -1,21 +1,22 @@
 import {StyleSheet} from 'react-native';
+import {shadowColorLight} from '../../assets/colors';
 import {NunitoFont} from '../../assets/fonts/nunitoFont';
 
 export default styles = StyleSheet.create({
   mainLogo: {
     alignSelf: 'center',
-    marginTop: 54,
     height: 30,
     width: 184,
-    marginBottom: 40,
+    marginBottom: 20,
+    marginTop: 10,
   },
   sortedBoxContainer: {
     height: 52,
-    width: 335,
     backgroundColor: '#FFF6C7',
     alignSelf: 'center',
     flexDirection: 'row',
     borderRadius: 4,
+    borderRightColor: '#DFAF004D',
     marginTop: 20,
     marginHorizontal: 20,
   },
@@ -25,9 +26,7 @@ export default styles = StyleSheet.create({
     fontFamily: NunitoFont,
     fontSize: 16,
   },
-  flatListContainer: {
-    marginTop: 20,
-  },
+
   modalStyle: {
     width: 170,
     height: 36,
@@ -63,7 +62,9 @@ export default styles = StyleSheet.create({
   },
   jobsHeader: {
     backgroundColor: '#FFD439',
-    height: 104,
+    height: 60,
+    shadowColor: shadowColorLight,
+    elevation: 1,
   },
   spaceBetweenContainer: {
     height: 50,

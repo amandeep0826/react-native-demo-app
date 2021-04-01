@@ -16,6 +16,7 @@ import {NunitoFont} from '../../assets/fonts/nunitoFont';
 import {backgroundColor} from '../../styles/commonStyle';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import ModalDropdown from 'react-native-modal-dropdown';
+import AddressComponent from './AddressComponent';
 
 const JobDetailScreen = props => {
   return (
@@ -55,6 +56,13 @@ const JobDetailScreen = props => {
       </View>
       <View style={styles.locationContainer}>
         <Text style={styles.locationText}>LOCATIONS</Text>
+        {/* <AddressComponent
+          pickupAddress=""
+          user_name=""
+          user_phone=""
+          user_apartment=""
+          user_landmark=""
+        /> */}
         <View style={styles.pickupAddressContainer}>
           <View style={styles.pickupDotContainer}>
             <View
@@ -334,6 +342,7 @@ export const styles = StyleSheet.create({
   },
   pickupOtherDetails: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
   },
   sendIconContainer: {
     backgroundColor: primaryDarkBlue,
@@ -350,8 +359,7 @@ export const styles = StyleSheet.create({
   },
   iconsContainer: {
     flexDirection: 'row',
-    alignSelf: 'flex-end',
-    marginHorizontal: 10,
+    marginHorizontal: 20,
   },
   iconStyles: {
     alignSelf: 'center',
@@ -362,6 +370,7 @@ export const styles = StyleSheet.create({
     fontSize: 14,
     fontFamily: NunitoFont,
     marginLeft: 18.5,
+    width: 220,
   },
   dropoffAddress: {
     color: pureBlack,
@@ -395,6 +404,7 @@ export const styles = StyleSheet.create({
   },
   dropoffOtherDetails: {
     flexDirection: 'row',
+    flexWrap: 'wrap',
   },
   packageTypeText: {
     fontSize: 14,

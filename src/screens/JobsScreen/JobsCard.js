@@ -11,6 +11,7 @@ import {NunitoFont} from '../../assets/fonts/nunitoFont';
 import {DeliveryTitleComponent} from './DeliveryTItleComponent';
 import {OrderTitleComponent} from './OrderTitleComponent';
 import api, {AcceptDelivery, getHeaders, getToken} from '../../api/api';
+import {tertiarybackgroundColor} from '../../assets/colors';
 
 const {width, height} = Dimensions.get('window');
 
@@ -78,6 +79,7 @@ export default function JobsCard({item, onPress}) {
   return (
     <TouchableOpacity
       style={styles.cardView}
+      activeOpacity={0.7}
       onPress={() => {
         onPress();
       }}>
@@ -186,13 +188,14 @@ export default function JobsCard({item, onPress}) {
 
 const styles = StyleSheet.create({
   cardView: {
-    width: 335,
-    backgroundColor: '#FFF6C7',
+    width: 348,
+    backgroundColor: tertiarybackgroundColor,
     shadowColor: '#DFAF0080',
     shadowOpacity: 10,
     alignSelf: 'center',
     borderRadius: 6,
     marginBottom: 41,
+    marginHorizontal: 20,
   },
   topContainer: {
     flexDirection: 'row',
@@ -205,6 +208,7 @@ const styles = StyleSheet.create({
   chargesContainer: {
     marginLeft: 55,
     marginTop: 20,
+    marginRight: 20,
   },
   johnDoeText: {
     fontSize: 16,
@@ -303,6 +307,7 @@ const styles = StyleSheet.create({
     marginTop: 18,
     height: 43,
     marginBottom: -20,
+    marginHorizontal: 20,
   },
   acceptButtonText: {
     fontSize: 14,

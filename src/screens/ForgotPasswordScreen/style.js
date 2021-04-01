@@ -42,7 +42,6 @@ export const styles = StyleSheet.create({
     fontSize: 24,
     fontWeight: 'bold',
     marginLeft: 20,
-    marginTop: 49,
     fontFamily: 'Nunito-Regular',
   },
 });
