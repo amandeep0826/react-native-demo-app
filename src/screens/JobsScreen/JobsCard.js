@@ -11,7 +11,7 @@ import {NunitoFont} from '../../assets/fonts/nunitoFont';
 import {DeliveryTitleComponent} from './DeliveryTItleComponent';
 import {OrderTitleComponent} from './OrderTitleComponent';
 import api, {AcceptDelivery, getHeaders, getToken} from '../../api/api';
-import {tertiarybackgroundColor} from '../../assets/colors';
+import {pureBlack, tertiarybackgroundColor} from '../../assets/colors';
 
 const {width, height} = Dimensions.get('window');
 
@@ -84,25 +84,28 @@ export default function JobsCard({item, onPress}) {
         onPress();
       }}>
       <View style={styles.topContainer}>
-        {/* <Image style={styles.image}/> */}
-        <Image
-          style={{
-            height: 50,
-            width: 50,
-            borderRadius: 50,
-            marginTop: 18,
-            marginLeft: 20,
-          }}
-          source={{
-            uri:
-              'https://ca.slack-edge.com/TC9LHABTP-U01J3U0JKHS-129560ba72fa-192',
-          }}
-        />
-        <View style={styles.nameContainer}>
-          {/* <Text>{item.name}</Text> */}
-          <Text style={styles.johnDoeText}>John Doe</Text>
-          <Text style={styles.singleDeliveryText}>Single Delivery</Text>
+        <View style={styles.nameAndImageContainer}>
+          <Image
+            style={{
+              height: 50,
+              width: 50,
+              borderRadius: 50,
+              marginTop: 18,
+              marginLeft: 20,
+            }}
+            source={{
+              uri:
+                'https://ca.slack-edge.com/TC9LHABTP-U01J3U0JKHS-129560ba72fa-192',
+            }}
+          />
+          <View style={styles.nameContainer}>
+            {/* <Text>{item.name}</Text> */}
+            <Text style={styles.johnDoeText}>John Doe</Text>
+            <Text style={styles.singleDeliveryText}>Single Delivery</Text>
+          </View>
         </View>
+        {/* <Image style={styles.image}/> */}
+
         <View style={styles.chargesContainer}>
           {/* <Text>{item.name}</Text> */}
           <Text style={styles.chargesText}>{item.delivered_charges}</Text>
@@ -111,13 +114,13 @@ export default function JobsCard({item, onPress}) {
       </View>
       <View style={{backgroundColor: '#FFDE67', height: 2, padding: 1}}></View>
       <View style={styles.middleContainer}>
-        <View>
+        <View style={styles.pickUpDateContainer}>
           <Text style={styles.pickUpDateText}>PICKUP DATE</Text>
           <Text style={styles.pickUpDate}>
             {item.pickupDetails[0].pickup_date}
           </Text>
         </View>
-        <View>
+        <View style={styles.pickUpTimeContainer}>
           <Text style={styles.pickUpTimeText}>PICKUP TIME</Text>
           <Text style={styles.pickUpTime}>
             {item.pickupDetails[0].pickup_time}
@@ -126,14 +129,13 @@ export default function JobsCard({item, onPress}) {
       </View>
       <View style={{backgroundColor: '#FFDE67', height: 2, padding: 1}}></View>
       <View style={styles.bottomContainer}>
-        <View style={{flexDirection: 'row'}}>
+        <View style={{flexDirection: 'row', marginTop: 14.5}}>
           <View
             style={{
               backgroundColor: '#009957',
               height: 18,
               width: 18,
               borderRadius: 10,
-              marginTop: 29,
               marginLeft: 20,
             }}>
             <View
@@ -148,15 +150,21 @@ export default function JobsCard({item, onPress}) {
           </View>
           <Text style={styles.pickupPointText}>PICKUP POINT</Text>
         </View>
-        <Text style={styles.pickupPoint}>{item.pickupDetails[0].address}</Text>
-        <View style={{flexDirection: 'row'}}>
+        <View style={styles.pickUpPointContainer}>
+          <View style={styles.dashedLine}></View>
+          <View style={{}}>
+            <Text style={styles.pickupPoint}>
+              {item.pickupDetails[0].address}
+            </Text>
+          </View>
+        </View>
+        <View style={{flexDirection: 'row', marginTop: 3.5}}>
           <View
             style={{
               backgroundColor: '#0031A3',
               height: 18,
               width: 18,
               borderRadius: 10,
-              marginTop: 29,
               marginLeft: 20,
             }}>
             <View
@@ -176,6 +184,7 @@ export default function JobsCard({item, onPress}) {
         </Text>
       </View>
       <TouchableOpacity
+        activeOpacity={0.7}
         style={styles.acceptButtonContainer}
         onPress={() => {
           acceptDeliveryHandler();
@@ -188,25 +197,27 @@ export default function JobsCard({item, onPress}) {
 
 const styles = StyleSheet.create({
   cardView: {
-    width: 348,
     backgroundColor: tertiarybackgroundColor,
-    shadowColor: '#DFAF0080',
     shadowOpacity: 10,
     alignSelf: 'center',
     borderRadius: 6,
     marginBottom: 41,
     marginHorizontal: 20,
+    elevation: 3,
   },
   topContainer: {
     flexDirection: 'row',
     marginBottom: 15,
+    justifyContent: 'space-between',
   },
   nameContainer: {
     marginLeft: 10,
     marginTop: 20,
   },
+  nameAndImageContainer: {
+    flexDirection: 'row',
+  },
   chargesContainer: {
-    marginLeft: 55,
     marginTop: 20,
     marginRight: 20,
   },
@@ -234,9 +245,12 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: -15,
     marginBottom: 15,
+    justifyContent: 'space-between',
+  },
+  pickUpDateContainer: {
+    marginLeft: 20,
   },
   pickUpDateText: {
-    marginLeft: 20,
     marginTop: 31,
     color: '#404040',
     fontSize: 12,
@@ -245,13 +259,14 @@ const styles = StyleSheet.create({
   pickUpDate: {
     color: '#000000',
     fontSize: 14,
-    marginLeft: 20,
     marginTop: 3,
     fontFamily: NunitoFont,
     fontWeight: 'bold',
   },
+  pickUpTimeContainer: {
+    marginRight: 30,
+  },
   pickUpTimeText: {
-    marginLeft: 134,
     marginTop: 31,
     color: '#404040',
     fontSize: 12,
@@ -260,17 +275,17 @@ const styles = StyleSheet.create({
   pickUpTime: {
     color: '#000000',
     fontSize: 14,
-    marginLeft: 134,
     marginTop: 3,
     fontFamily: NunitoFont,
     fontWeight: 'bold',
   },
-  bottomContainer: {},
+  bottomContainer: {
+    justifyContent: 'space-between',
+  },
   pickupPointText: {
     fontSize: 14,
     fontWeight: 'bold',
     fontFamily: NunitoFont,
-    marginTop: 29,
     marginLeft: 13,
   },
   dropoffPointText: {
@@ -280,18 +295,25 @@ const styles = StyleSheet.create({
     marginTop: 29,
     marginLeft: 13,
   },
+  pickUpPointContainer: {
+    flexDirection: 'row',
+  },
+  dashedLine: {
+    backgroundColor: pureBlack,
+    width: 1,
+    marginLeft: 29.5,
+  },
   pickupPoint: {
     color: '#009957',
-    marginLeft: 51,
-    marginRight: 52,
+    marginLeft: 21.5,
     fontSize: 14,
     fontFamily: NunitoFont,
     marginTop: 2,
+    marginBottom: 20,
   },
   dropoffPoint: {
     color: '#0031A3',
     marginLeft: 51,
-    marginRight: 52,
     fontSize: 14,
     fontFamily: NunitoFont,
     marginTop: 2,

@@ -63,9 +63,10 @@ export const styles = StyleSheet.create({
     borderColor: '#FF148E',
     borderWidth: 2,
     height: 43,
-    marginTop: 200,
+    position: 'absolute',
+    bottom: 0,
+    marginBottom: 10,
   },
-
   driverButtonText: {
     fontSize: 14,
     color: '#FF148E',
@@ -97,9 +98,7 @@ export const styles = StyleSheet.create({
     marginTop: 12,
     fontSize: 14,
   },
-  container: {
-    flexDirection: 'column',
-    backgroundColor: '#FFDE67',
-    height: 1248,
+  forgotPasswordContainer: {
+    padding: 5,
   },
 });

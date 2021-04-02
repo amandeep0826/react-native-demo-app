@@ -6,13 +6,15 @@ import {
   Text,
   View,
   RefreshControl,
+  StyleSheet,
 } from 'react-native';
 import ModalDropdown from 'react-native-modal-dropdown';
 import api, {Deliveries, getHeaders} from '../../api/api';
 import {primarybackgroundColor, primarycolor} from '../../assets/colors';
+import {NunitoFont} from '../../assets/fonts/nunitoFont';
 import {backgroundColor} from '../../styles/commonStyle';
 import JobsCard from './JobsCard';
-import styles from './style';
+// import styles from './style';
 
 const JobScreen = ({navigation, ...props}) => {
   const [deliveriesJobs, setDeliveriesJobs] = useState('');
@@ -106,5 +108,69 @@ const JobScreen = ({navigation, ...props}) => {
     </View>
   );
 };
+
+const styles = StyleSheet.create({
+  mainLogo: {
+    alignSelf: 'center',
+    height: 30,
+    width: 184,
+    marginBottom: 20,
+    marginTop: 20,
+  },
+  sortedBoxContainer: {
+    backgroundColor: '#FFF6C7',
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    borderRadius: 4,
+    borderRightColor: '#DFAF004D',
+    marginTop: 20,
+    marginHorizontal: 20,
+    elevation: 2,
+  },
+  sortByText: {
+    marginLeft: 20,
+    marginVertical: 15,
+    fontFamily: NunitoFont,
+    fontSize: 16,
+    alignSelf: 'flex-start',
+  },
+  modalStyle: {
+    width: 170,
+    height: 36,
+    backgroundColor: '#FFDE67',
+    marginVertical: 8,
+    marginRight: 20,
+    alignSelf: 'center',
+  },
+  dropdownStyle: {
+    backgroundColor: '#FFDE67',
+    height: 162,
+    width: 170,
+    backgroundColor: '#FFDE67',
+  },
+  dropdownTextStyle: {
+    fontSize: 14,
+    marginLeft: 16,
+    backgroundColor: '#FFDE67',
+    color: '#000000',
+  },
+  TextStyle: {
+    fontFamily: NunitoFont,
+    fontSize: 14,
+    marginTop: 9,
+    marginBottom: 8,
+    marginLeft: 16,
+    backgroundColor: '#FFDE67',
+  },
+  jobsContainer: {
+    backgroundColor: '#FFDE67',
+    flex: 1,
+  },
+  jobsHeader: {
+    backgroundColor: '#FFD439',
+    height: 60,
+    elevation: 3,
+  },
+});
 
 export default JobScreen;

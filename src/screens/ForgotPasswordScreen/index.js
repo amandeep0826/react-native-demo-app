@@ -40,7 +40,9 @@ const ForgotPassword = ({navigation}) => {
         navigation.navigate('DummyScreen');
       })
       .catch(error => {
-        alert('Email does not exist');
+        if (!email.trim()) {
+          ToastAndroid.show('Please enter your email', ToastAndroid.SHORT);
+        }
       });
   };
 

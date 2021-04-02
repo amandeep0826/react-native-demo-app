@@ -149,18 +149,22 @@ const SettingsScreen = ({navigation}) => {
 
 const styles = StyleSheet.create({
   headerContainer: {
-    height: 92,
+    height: 48,
     backgroundColor: secondarybackgroundColor,
+    elevation: 2,
   },
   settingsText: {
     fontFamily: NunitoFont,
-    marginTop: 50,
+    marginTop: 6,
     fontWeight: 'bold',
     fontSize: 16,
     alignSelf: 'center',
+    marginBottom: 20,
   },
   editNameContainer: {
     flexDirection: 'row',
+    marginTop: 16,
+    alignSelf: 'center',
   },
   bodyContainer: {
     alignSelf: 'center',
@@ -170,7 +174,6 @@ const styles = StyleSheet.create({
     fontFamily: NunitoFont,
     fontWeight: 'bold',
     textAlign: 'center',
-    marginTop: 16,
   },
   phone: {
     fontSize: 16,
@@ -179,8 +182,8 @@ const styles = StyleSheet.create({
     marginTop: 8,
   },
   pencilIcon: {
-    marginTop: 20,
     marginLeft: 6,
+    marginTop: 5,
   },
   contactUsContainer: {
     flexDirection: 'row',

@@ -72,6 +72,7 @@ const DriverSignupScreen = ({navigation}) => {
         </View>
         <View style={styles.inputfields}>
           <TextInput
+            selectionColor={placeholderTextColor}
             style={styles.inputStyle}
             placeholder="Enter your name"
             placeholderTextColor={placeholderTextColor}
@@ -85,6 +86,7 @@ const DriverSignupScreen = ({navigation}) => {
         </View>
         <View style={styles.inputfields}>
           <TextInput
+            selectionColor={placeholderTextColor}
             style={styles.inputStyle}
             placeholder="Enter your number"
             placeholderTextColor={placeholderTextColor}
@@ -98,6 +100,7 @@ const DriverSignupScreen = ({navigation}) => {
         </View>
         <View style={styles.inputfields}>
           <TextInput
+            selectionColor={placeholderTextColor}
             style={styles.inputStyle}
             placeholder="Enter your email"
             placeholderTextColor={placeholderTextColor}
@@ -111,6 +114,7 @@ const DriverSignupScreen = ({navigation}) => {
         </View>
         <View style={styles.inputfields}>
           <TextInput
+            selectionColor={placeholderTextColor}
             style={styles.typeMessageInput}
             placeholder="Please type message..."
             placeholderTextColor={placeholderTextColor}
@@ -122,6 +126,7 @@ const DriverSignupScreen = ({navigation}) => {
       </View>
       <TouchableOpacity
         style={styles.submitButtonContainer}
+        activeOpacity={0.7}
         onPress={() => {
           signUpHandler();
         }}>

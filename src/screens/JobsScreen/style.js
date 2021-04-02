@@ -1,5 +1,5 @@
 import {StyleSheet} from 'react-native';
-import {shadowColorLight} from '../../assets/colors';
+import {primarycolor, shadowColorLight} from '../../assets/colors';
 import {NunitoFont} from '../../assets/fonts/nunitoFont';
 
 export default styles = StyleSheet.create({
@@ -8,7 +8,7 @@ export default styles = StyleSheet.create({
     height: 30,
     width: 184,
     marginBottom: 20,
-    marginTop: 10,
+    marginTop: 20,
   },
   sortedBoxContainer: {
     height: 52,
@@ -19,6 +19,7 @@ export default styles = StyleSheet.create({
     borderRightColor: '#DFAF004D',
     marginTop: 20,
     marginHorizontal: 20,
+    elevation: 2,
   },
   sortByText: {
     marginLeft: 20,
@@ -26,7 +27,6 @@ export default styles = StyleSheet.create({
     fontFamily: NunitoFont,
     fontSize: 16,
   },
-
   modalStyle: {
     width: 170,
     height: 36,
@@ -63,8 +63,7 @@ export default styles = StyleSheet.create({
   jobsHeader: {
     backgroundColor: '#FFD439',
     height: 60,
-    shadowColor: shadowColorLight,
-    elevation: 1,
+    elevation: 3,
   },
   spaceBetweenContainer: {
     height: 50,
@@ -79,7 +78,6 @@ export default styles = StyleSheet.create({
     alignSelf: 'center',
     marginTop: 18,
     height: 43,
-    // marginBottom: -20,
   },
   acceptButtonText: {
     fontSize: 14,
@@ -198,7 +196,7 @@ export default styles = StyleSheet.create({
   },
   acceptButtonContainer: {
     elevation: 3,
-    backgroundColor: '#FF148E',
+    backgroundColor: primarycolor,
     borderRadius: 4,
     paddingVertical: 10,
     paddingHorizontal: 12,

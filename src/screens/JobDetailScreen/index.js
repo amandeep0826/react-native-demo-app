@@ -359,7 +359,7 @@ export const styles = StyleSheet.create({
   },
   iconsContainer: {
     flexDirection: 'row',
-    marginHorizontal: 20,
+    marginHorizontal: 30,
   },
   iconStyles: {
     alignSelf: 'center',

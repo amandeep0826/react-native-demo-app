@@ -1,14 +1,28 @@
 import React, {useState} from 'react';
-import {Image, Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {
+  Image,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+  ActivityIndicator,
+  ToastAndroid,
+} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import api, {DriverLogin, getToken} from '../../api/api';
-import {placeholderTextColor} from '../../assets/colors';
+import {
+  placeholderTextColor,
+  primarybackgroundColor,
+  primarycolor,
+  pureBlack,
+} from '../../assets/colors';
 import {backgroundColor} from '../../styles/commonStyle';
 import {styles} from './style';
 
 const DriverLoginScreen = ({navigation}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
+  const [loading, setLoading] = useState(false);
 
   getToken().then(token => {
     const navigationParam = {
@@ -19,6 +33,28 @@ const DriverLoginScreen = ({navigation}) => {
       navigation.reset(navigationParam);
     }
   });
+
+  const checkTextInput = () => {
+    //Check for the Name TextInput
+    if (!username.trim()) {
+      ToastAndroid.show('Please enter your email', ToastAndroid.SHORT);
+      setLoading(false);
+      return;
+    }
+    //Check for the Email TextInput
+    if (!password.trim()) {
+      ToastAndroid.show('Please enter your password', ToastAndroid.SHORT);
+      setLoading(false);
+      return;
+    }
+    if (!username.trim() && !password.trim()) {
+      ToastAndroid.show('Please Enter Email and Password', ToastAndroid.SHORT);
+      setLoading(false);
+      return;
+    }
+    //Checked Successfully
+    //Do whatever you want
+  };
   // const [token, setToken] = useState('');
 
   // const storeData = async (token) => {
@@ -61,7 +97,10 @@ const DriverLoginScreen = ({navigation}) => {
         return token;
       })
       .catch(error => {
-        // alert('Incorrect username or password');
+        if (username.trim() && password.trim()) {
+          ToastAndroid.show('Email or password incorrect', ToastAndroid.SHORT);
+        }
+        setLoading(false);
         console.log(error);
       });
   };
@@ -74,7 +113,7 @@ const DriverLoginScreen = ({navigation}) => {
   };
 
   return (
-    <View style={styles.container}>
+    <View style={backgroundColor.container}>
       <View>
         <Image
           style={styles.mainLogo}
@@ -89,6 +128,7 @@ const DriverLoginScreen = ({navigation}) => {
         <View style={styles.emailInput}>
           <TextInput
             style={{marginLeft: 10, fontFamily: 'Nunito-Regular', fontSize: 16}}
+            selectionColor={placeholderTextColor}
             placeholderTextColor={placeholderTextColor}
             placeholder="Email or phone number"
             onChangeText={username => {
@@ -99,6 +139,7 @@ const DriverLoginScreen = ({navigation}) => {
         <View style={styles.passwordInput}>
           <TextInput
             style={{marginLeft: 10, fontFamily: 'Nunito-Regular', fontSize: 16}}
+            selectionColor={placeholderTextColor}
             placeholderTextColor={placeholderTextColor}
             placeholder="Password"
             onChangeText={password => {
@@ -108,20 +149,34 @@ const DriverLoginScreen = ({navigation}) => {
         </View>
       </View>
       <TouchableOpacity
+        style={styles.forgotPasswordContainer}
+        activeOpacity={0.7}
         onPress={() => {
           navigation.navigate('ForgotPassword');
         }}>
         <Text style={styles.forgotPasswordText}>Forgot password?</Text>
       </TouchableOpacity>
       <TouchableOpacity
+        activeOpacity={0.7}
         style={styles.signInButtonContainer}
         onPress={() => {
           logInHandler();
+          checkTextInput();
+          setLoading(true);
           // navigation.navigate('TabNavigation');
         }}>
-        <Text style={styles.signInButtonText}>SIGN IN</Text>
+        {loading ? (
+          <ActivityIndicator
+            size="large"
+            color={primarybackgroundColor}
+            style={{paddingBottom: 6}}
+          />
+        ) : (
+          <Text style={styles.signInButtonText}>SIGN IN</Text>
+        )}
       </TouchableOpacity>
       <TouchableOpacity
+        activeOpacity={0.7}
         style={styles.driverButtonContainer}
         onPress={() => {
           navigation.navigate('DriverSignupScreen');
