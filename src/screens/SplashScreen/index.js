@@ -5,13 +5,15 @@ import {backgroundColor} from '../../styles/commonStyle';
 
 const SplashScreen = ({navigation}) => {
   const [token, setToken] = useState(null);
+
   useEffect(() => {
-    const fetchToken = async () => {
+    const fetchHeader = async () => {
       const token = await getToken();
       setToken(token);
+      ShowAlertWithDelay(token);
     };
-    fetchToken();
-    ShowAlertWithDelay();
+    fetchHeader();
+    console.log({token});
   }, []);
 
   const ShowAlertWithDelay = token => {

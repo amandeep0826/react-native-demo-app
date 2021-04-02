@@ -25,7 +25,7 @@ const RootStackNavigation = () => {
       setToken(token);
     };
     fetchToken();
-    console.log({token});
+    // console.log({token});
   }, [token]);
 
   return (

@@ -81,6 +81,7 @@ const JobScreen = ({navigation, ...props}) => {
         ) : (
           <FlatList
             data={deliveriesJobs.deliveries}
+            showsVerticalScrollIndicator={false}
             refreshControl={
               <RefreshControl
                 refreshing={loading}
@@ -124,7 +125,6 @@ const styles = StyleSheet.create({
     borderRadius: 4,
     borderRightColor: '#DFAF004D',
     marginTop: 20,
-    marginHorizontal: 20,
     elevation: 2,
   },
   sortByText: {
@@ -165,6 +165,7 @@ const styles = StyleSheet.create({
   jobsContainer: {
     backgroundColor: '#FFDE67',
     flex: 1,
+    paddingHorizontal: 20,
   },
   jobsHeader: {
     backgroundColor: '#FFD439',
