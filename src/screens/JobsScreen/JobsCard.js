@@ -202,7 +202,6 @@ const styles = StyleSheet.create({
     alignSelf: 'center',
     borderRadius: 6,
     marginBottom: 41,
-    marginHorizontal: 20,
     elevation: 3,
   },
   topContainer: {

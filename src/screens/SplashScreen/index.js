@@ -17,7 +17,7 @@ const SplashScreen = ({navigation}) => {
   }, []);
 
   const ShowAlertWithDelay = token => {
-    if (!token) {
+    if (token === null) {
       setTimeout(() => {
         navigation.navigate('DriverLogin');
       }, 2000);
