@@ -7,10 +7,12 @@ import {
   View,
   RefreshControl,
   StyleSheet,
+  SafeAreaView,
+  StatusBar,
 } from 'react-native';
 import ModalDropdown from 'react-native-modal-dropdown';
 import api, {Deliveries, getHeaders} from '../../api/api';
-import {primarybackgroundColor, primarycolor} from '../../assets/colors';
+import {primarybackgroundColor, primarycolor, secondarybackgroundColor} from '../../assets/colors';
 import {NunitoFont} from '../../assets/fonts/nunitoFont';
 import {backgroundColor} from '../../styles/commonStyle';
 import JobsCard from './JobsCard';
@@ -45,7 +47,8 @@ const JobScreen = ({navigation, ...props}) => {
       });
   }
   return (
-    <View style={backgroundColor.mainContainer}>
+    <SafeAreaView style={backgroundColor.mainContainer}>
+      <StatusBar backgroundColor={secondarybackgroundColor}/>
       <View style={styles.jobsHeader}>
         <Image
           style={styles.mainLogo}
@@ -106,7 +109,7 @@ const JobScreen = ({navigation, ...props}) => {
           />
         )}
       </View>
-    </View>
+    </SafeAreaView>
   );
 };
 
