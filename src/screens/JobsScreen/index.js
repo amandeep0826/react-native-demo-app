@@ -3,52 +3,77 @@ import {
   ActivityIndicator,
   FlatList,
   Image,
-  Text,
-  View,
   RefreshControl,
-  StyleSheet,
   SafeAreaView,
   StatusBar,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
 } from 'react-native';
 import ModalDropdown from 'react-native-modal-dropdown';
 import api, {Deliveries, getHeaders} from '../../api/api';
-import {primarybackgroundColor, primarycolor, secondarybackgroundColor} from '../../assets/colors';
+import {
+  primarybackgroundColor,
+  primarycolor,
+  secondarybackgroundColor,
+} from '../../assets/colors';
 import {NunitoFont} from '../../assets/fonts/nunitoFont';
 import {backgroundColor} from '../../styles/commonStyle';
 import JobsCard from './JobsCard';
-// import styles from './style';
 
 const JobScreen = ({navigation, ...props}) => {
-  const [deliveriesJobs, setDeliveriesJobs] = useState('');
+  const [deliveriesJobs, setDeliveriesJobs] = useState([]);
   const [headers, setHeaders] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [offset, setOffset] = useState(1);
+  const [showLoadmore, setShowLoadmore] = useState(true);
   const dropDownOptions = ['Recent Posted', 'Time', 'Payment', 'Distance'];
 
   useEffect(() => {
     const fetchHeader = async () => {
       const _headers = await getHeaders();
       setHeaders(_headers);
-      getDeliveriesFromAPI(_headers, 1);
+      getDeliveriesFromAPI(_headers, 1, offset);
     };
-    if (deliveriesJobs === '') fetchHeader();
+    if (deliveriesJobs.length === 0) fetchHeader();
   }, []);
 
-  function getDeliveriesFromAPI(_headers, sorting) {
+  const getDeliveriesFromAPI = (_headers, sorting, offset) => {
     api
-      .get(Deliveries(sorting), {
+      .get(Deliveries(sorting, offset), {
         headers: _headers,
       })
       .then(response => {
-        setDeliveriesJobs(response.data);
+        if (response.data.deliveries.length == 0) {
+          setShowLoadmore(false);
+          return;
+        }
+        const newData = [...deliveriesJobs, ...response.data.deliveries];
+        setDeliveriesJobs(newData);
+
+        // setDeliveriesJobs(response.data);
+        setOffset(offset + 1);
         setLoading(false);
       })
       .catch(error => {
         console.log({error});
       });
-  }
+  };
+
+  const renderFooter = () => {
+    return showLoadmore ? (
+      <ActivityIndicator
+        color={primarycolor}
+        style={{marginBottom: 10}}
+        size="large"
+      />
+    ) : null;
+  };
+
   return (
     <SafeAreaView style={backgroundColor.mainContainer}>
-      <StatusBar backgroundColor={secondarybackgroundColor}/>
+      <StatusBar backgroundColor={secondarybackgroundColor} />
       <View style={styles.jobsHeader}>
         <Image
           style={styles.mainLogo}
@@ -72,7 +97,7 @@ const JobScreen = ({navigation, ...props}) => {
           />
         </View>
 
-        {loading ? (
+        {loading && deliveriesJobs.length == 0 ? (
           <ActivityIndicator
             size="large"
             color={primarycolor}
@@ -83,8 +108,13 @@ const JobScreen = ({navigation, ...props}) => {
           />
         ) : (
           <FlatList
-            data={deliveriesJobs.deliveries}
+            data={deliveriesJobs}
             showsVerticalScrollIndicator={false}
+            ListFooterComponent={renderFooter}
+            onEndReachedThreshold={0.5}
+            onEndReached={() => {
+              getDeliveriesFromAPI(headers, 1, offset);
+            }}
             refreshControl={
               <RefreshControl
                 refreshing={loading}

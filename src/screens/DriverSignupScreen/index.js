@@ -1,5 +1,11 @@
 import React, {useState} from 'react';
-import {Text, TextInput, TouchableOpacity, View} from 'react-native';
+import {
+  ScrollView,
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View,
+} from 'react-native';
 import api, {DriverSignUp} from '../../api/api';
 import {placeholderTextColor} from '../../assets/colors';
 import {backgroundColor} from '../../styles/commonStyle';
@@ -59,7 +65,7 @@ const DriverSignupScreen = ({navigation}) => {
   };
 
   return (
-    <View style={backgroundColor.container}>
+    <ScrollView style={backgroundColor.container}>
       <View style={{marginLeft: 20}}>
         <Text style={styles.becomeDriverText}>Become a Driver</Text>
         <Text style={styles.sendInfoText}>
@@ -132,7 +138,7 @@ const DriverSignupScreen = ({navigation}) => {
         }}>
         <Text style={styles.submitButtonText}>BECOME A DRIVER</Text>
       </TouchableOpacity>
-    </View>
+    </ScrollView>
   );
 };
 

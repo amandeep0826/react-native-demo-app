@@ -16,30 +16,6 @@ import {pureBlack, tertiarybackgroundColor} from '../../assets/colors';
 const {width, height} = Dimensions.get('window');
 
 export default function JobsCard({item, onPress}) {
-  // const [headers, setHeaders] = useState(null);
-
-  // useEffect(() => {
-  //   const fetchHeader = async () => {
-  //     const _headers = await getHeaders();
-  //     setHeaders(_headers);
-  //   };
-  //   fetchHeader();
-  // }, []);
-
-  // const acceptDeliveryHandler = _headers => {
-  //   api
-  //     .put(AcceptDelivery, {
-  //       headers: _headers,
-  //     })
-  //     .then(response => {
-  //       navigation.navigate('DummyScreen');
-  //     })
-  //     .catch(error => {
-  //       console.log({error});
-  //       console.log(_headers);
-  //     });
-  // };
-
   const [headers, setHeaders] = useState(null);
 
   useEffect(() => {

@@ -1,5 +1,13 @@
 import React from 'react';
-import {View, Text, Image, StyleSheet, ScrollView} from 'react-native';
+import {
+  Image,
+  ScrollView,
+  StyleSheet,
+  Text,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import ModalDropdown from 'react-native-modal-dropdown';
 import {
   cardBorderColor,
   dashColor,
@@ -9,14 +17,10 @@ import {
   primaryGreen,
   pureBlack,
   pureWhite,
-  secondarybackgroundColor,
   tertiarybackgroundColor,
 } from '../../assets/colors';
 import {NunitoFont} from '../../assets/fonts/nunitoFont';
 import {backgroundColor} from '../../styles/commonStyle';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import ModalDropdown from 'react-native-modal-dropdown';
-import AddressComponent from './AddressComponent';
 
 const JobDetailScreen = props => {
   return (
@@ -109,22 +113,18 @@ const JobDetailScreen = props => {
               </View>
             </View>
             <View style={styles.iconsContainer}>
-              <View style={styles.sendIconContainer}>
-                <MaterialCommunityIcons
-                  style={styles.iconStyles}
-                  name="send"
-                  size={24}
-                  color={pureWhite}
+              <TouchableOpacity activeOpacity={0.7}>
+                <Image
+                  style={styles.navigationButton}
+                  source={require('../../assets/navigation.png')}
                 />
-              </View>
-              <View style={styles.phoneIconContainer}>
-                <MaterialCommunityIcons
-                  style={styles.iconStyles}
-                  name="phone"
-                  size={24}
-                  color={pureWhite}
+              </TouchableOpacity>
+              <TouchableOpacity activeOpacity={0.7}>
+                <Image
+                  style={styles.callButton}
+                  source={require('../../assets/call.png')}
                 />
-              </View>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -174,22 +174,18 @@ const JobDetailScreen = props => {
               </View>
             </View>
             <View style={styles.iconsContainer}>
-              <View style={styles.sendIconContainer}>
-                <MaterialCommunityIcons
-                  style={styles.iconStyles}
-                  name="send"
-                  size={24}
-                  color={pureWhite}
+              <TouchableOpacity activeOpacity={0.7}>
+                <Image
+                  style={styles.navigationButton}
+                  source={require('../../assets/navigation.png')}
                 />
-              </View>
-              <View style={styles.phoneIconContainer}>
-                <MaterialCommunityIcons
-                  style={styles.iconStyles}
-                  name="phone"
-                  size={24}
-                  color={pureWhite}
+              </TouchableOpacity>
+              <TouchableOpacity activeOpacity={0.7}>
+                <Image
+                  style={styles.callButton}
+                  source={require('../../assets/call.png')}
                 />
-              </View>
+              </TouchableOpacity>
             </View>
           </View>
         </View>
@@ -265,12 +261,12 @@ export const styles = StyleSheet.create({
   },
   nameContainer: {
     marginLeft: 10,
-    marginTop: 23,
-    marginBottom: 22.5,
+    marginVertical: 22,
   },
   chargesContainer: {
     marginTop: 23,
-    marginLeft: 95,
+    marginLeft: 'auto',
+    marginRight: 20,
   },
   pickUpContainer: {
     flexDirection: 'row',
@@ -279,12 +275,12 @@ export const styles = StyleSheet.create({
   },
   pickupDateContainer: {
     marginLeft: 20,
-    marginTop: 16.4,
-    marginBottom: 16.5,
+    marginVertical: 16.5,
   },
   pickupTimeContainer: {
-    marginLeft: 172,
-    marginTop: 16.4,
+    marginVertical: 16.5,
+    marginLeft: 'auto',
+    marginRight: 30,
   },
   pickUpDateText: {
     color: iconColor,
@@ -344,11 +340,14 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     flexWrap: 'wrap',
   },
-  sendIconContainer: {
-    backgroundColor: primaryDarkBlue,
+  navigationButton: {
     height: 32,
     width: 32,
-    borderRadius: 50,
+  },
+  callButton: {
+    height: 32,
+    width: 32,
+    marginLeft: 15,
   },
   phoneIconContainer: {
     backgroundColor: primaryGreen,
@@ -359,7 +358,8 @@ export const styles = StyleSheet.create({
   },
   iconsContainer: {
     flexDirection: 'row',
-    marginHorizontal: 30,
+    marginRight: 20,
+    marginLeft: 'auto',
   },
   iconStyles: {
     alignSelf: 'center',

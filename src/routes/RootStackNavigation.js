@@ -1,11 +1,11 @@
-import { createStackNavigator } from '@react-navigation/stack';
-import React, { useEffect, useState } from 'react';
-import { getToken } from '../api/api';
+import {createStackNavigator} from '@react-navigation/stack';
+import React, {useEffect, useState} from 'react';
+import {getToken} from '../api/api';
 import {
   primarybackgroundColor,
-  secondarybackgroundColor
+  secondarybackgroundColor,
 } from '../assets/colors';
-import { NunitoFont } from '../assets/fonts/nunitoFont';
+import {NunitoFont} from '../assets/fonts/nunitoFont';
 import DriverLoginScreen from '../screens/DriverLoginScreen/index';
 import DriverSignupScreen from '../screens/DriverSignupScreen/index';
 import DummyScreen from '../screens/dummyScreen';
@@ -25,7 +25,7 @@ const RootStackNavigation = () => {
       setToken(token);
     };
     fetchToken();
-    console.log({token});
+    // console.log({token});
   }, [token]);
 
   return (

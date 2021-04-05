@@ -23,6 +23,8 @@ export const styles = StyleSheet.create({
     marginTop: 16,
     borderRadius: 5,
     height: 46,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
 
   signInButton: {

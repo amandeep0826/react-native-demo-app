@@ -1,6 +1,10 @@
 import React, {useEffect, useState} from 'react';
-import {Image, StyleSheet, View} from 'react-native';
+import {Image, SafeAreaView, StyleSheet, View, StatusBar} from 'react-native';
 import {getToken} from '../../api/api';
+import {
+  primarybackgroundColor,
+  secondarybackgroundColor,
+} from '../../assets/colors';
 import {backgroundColor} from '../../styles/commonStyle';
 
 const SplashScreen = ({navigation}) => {
@@ -11,28 +15,31 @@ const SplashScreen = ({navigation}) => {
       setToken(token);
     };
     fetchToken();
-    ShowAlertWithDelay();
-    console.log({token});
-  }, [token]);
+    ShowAlertWithDelay(token);
+    return token;
+  }, []);
 
-  const ShowAlertWithDelay = token => {
-    if (token==null) {
-      setTimeout(() => {
-        navigation.navigate('DriverLogin');
-      }, 2000);
+  const navigateWithCondition = token => {
+    if (token == null) {
+      navigation.replace('DriverLogin');
     } else {
-      setTimeout(() => {
-        navigation.navigate('TabNavigation');
-      }, 2000);
+      navigation.replace('TabNavigation');
     }
   };
+
+  const ShowAlertWithDelay = token => {
+    setTimeout(() => {
+      navigateWithCondition();
+    }, 1500);
+  };
   return (
-    <View style={backgroundColor.container}>
+    <SafeAreaView style={backgroundColor.container}>
+      <StatusBar backgroundColor={primarybackgroundColor} />
       <Image
         style={styles.traxiSplashLogo}
         source={require('../../assets/traxiSplashLogo.png')}
       />
-    </View>
+    </SafeAreaView>
   );
 };
 

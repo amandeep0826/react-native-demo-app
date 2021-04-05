@@ -8,8 +8,7 @@ export const AcceptDelivery = 'driver/accepted';
 export const DriverProfile = 'driver';
 export const UpdateDriverProfile = 'driver';
 export const ContactUs = 'driver/contact-us';
-export const DeliveriesByTime =
-  'driver/deliveries?status=1&sorting=2&page=1&limit=10';
+export const DeliveriesByTime = 'driver/deliveries?status=1&sorting=2&page=1';
 export const getToken = async () => {
   return await AsyncStorage.getItem('token');
 };
@@ -32,8 +31,8 @@ export const getHeaders = async () => {
   const token = await getToken();
   return {accept: 'application/json', Authorization: token};
 };
-export const Deliveries = sorting =>
-  `driver/deliveries?status=1&sorting=${sorting}&page=1&limit=10`;
+export const Deliveries = (sorting, offset) =>
+  `driver/deliveries?status=1&sorting=${sorting}&page=${offset}&limit=10`;
 export default axios.create({
   baseURL: 'https://app-transfer.com:3001/api/',
 });

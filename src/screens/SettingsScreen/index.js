@@ -45,7 +45,7 @@ const SettingsScreen = ({navigation}) => {
       const logOutValue = await removeToken();
       if (logOutValue) {
         alert('You are logged out!');
-        navigation.navigate('DriverLogin');
+        navigation.replace('DriverLogin');
       } else {
         alert('Error logging out');
       }

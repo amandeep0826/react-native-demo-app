@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   Image,
   Text,
@@ -8,16 +8,18 @@ import {
   ActivityIndicator,
   ToastAndroid,
   SafeAreaView,
-  StatusBar
+  StatusBar,
+  KeyboardAvoidingView,
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import {useNetInfo} from '@react-native-community/netinfo';
 import api, {DriverLogin, getToken} from '../../api/api';
 import {
   placeholderTextColor,
   primarybackgroundColor,
   primarycolor,
   pureBlack,
-  secondarybackgroundColor
+  secondarybackgroundColor,
 } from '../../assets/colors';
 import {backgroundColor} from '../../styles/commonStyle';
 import {styles} from './style';
@@ -26,6 +28,8 @@ const DriverLoginScreen = ({navigation}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [loading, setLoading] = useState(false);
+  const [visibility, setVisibility] = useState(false);
+  const netInfo = useNetInfo();
 
   getToken().then(token => {
     const navigationParam = {
@@ -36,6 +40,16 @@ const DriverLoginScreen = ({navigation}) => {
       navigation.reset(navigationParam);
     }
   });
+
+  useEffect(() => {
+    checkNetwork();
+  }, []);
+
+  const checkNetwork = () => {
+    if (netInfo.isConnected == false) {
+      ToastAndroid.show('No Internet detected.', ToastAndroid.SHORT);
+    }
+  };
 
   const checkTextInput = () => {
     //Check for the Name TextInput
@@ -65,6 +79,14 @@ const DriverLoginScreen = ({navigation}) => {
     setPassword(password);
   };
 
+  const visibilityControl = () => {
+    if (visibility == true) {
+      return false;
+    } else {
+      return true;
+    }
+  };
+
   const logInHandler = () => {
     const req = {email: username, password: password};
     api
@@ -84,7 +106,7 @@ const DriverLoginScreen = ({navigation}) => {
         const token = response.data.token;
         storeData(token);
 
-        navigation.navigate('TabNavigation');
+        navigation.replace('TabNavigation');
         return token;
       })
       .catch(error => {
@@ -104,79 +126,132 @@ const DriverLoginScreen = ({navigation}) => {
   };
 
   return (
-    <SafeAreaView style={backgroundColor.container}>
-      <StatusBar backgroundColor={primarybackgroundColor}/>
-      <View>
-        <Image
-          style={styles.mainLogo}
-          source={require('../../assets/traxiTextLogo.png')}
-        />
-      </View>
-      <View>
-        <Text style={styles.welcomeBackText}>Welcome Back</Text>
-        <Text style={styles.pleaseLoginText}>Please login to your account</Text>
-      </View>
-      <View>
-        <View style={styles.emailInput}>
-          <TextInput
-            style={{marginLeft: 10, fontFamily: 'Nunito-Regular', fontSize: 16}}
-            selectionColor={placeholderTextColor}
-            placeholderTextColor={placeholderTextColor}
-            placeholder="Email or phone number"
-            onChangeText={username => {
-              usernameHandler(username);
-            }}
+    <KeyboardAvoidingView
+      behavior={Platform.OS === 'android'}
+      style={{flex: 1}}>
+      <SafeAreaView style={backgroundColor.container}>
+        <StatusBar backgroundColor={primarybackgroundColor} />
+        <View>
+          <Image
+            style={styles.mainLogo}
+            source={require('../../assets/traxiTextLogo.png')}
           />
         </View>
-        <View style={styles.passwordInput}>
-          <TextInput
-            style={{marginLeft: 10, fontFamily: 'Nunito-Regular', fontSize: 16}}
-            selectionColor={placeholderTextColor}
-            placeholderTextColor={placeholderTextColor}
-            placeholder="Password"
-            secureTextEntry={true}
-            onChangeText={password => {
-              passwordHandler(password);
-            }}
-          />
+        <View>
+          <Text style={styles.welcomeBackText}>Welcome Back</Text>
+          <Text style={styles.pleaseLoginText}>
+            Please login to your account
+          </Text>
         </View>
-      </View>
-      <TouchableOpacity
-        style={styles.forgotPasswordContainer}
-        activeOpacity={0.7}
-        onPress={() => {
-          navigation.navigate('ForgotPassword');
-        }}>
-        <Text style={styles.forgotPasswordText}>Forgot password?</Text>
-      </TouchableOpacity>
-      <TouchableOpacity
-        activeOpacity={0.7}
-        style={styles.signInButtonContainer}
-        onPress={() => {
-          logInHandler();
-          checkTextInput();
-          setLoading(true);
-          // navigation.navigate('TabNavigation');
-        }}>
-        {(loading && username.trim() && password.trim())  ? (
-          <ActivityIndicator
-            size="large"
-            color={primarybackgroundColor}
-            style={{paddingBottom: 6}}
-          />
-        ) : (
-          <Text style={styles.signInButtonText}>SIGN IN</Text>
-        )}
-      </TouchableOpacity>
-      <TouchableOpacity
-        activeOpacity={0.7}
-        style={styles.driverButtonContainer}
-        onPress={() => {
-          navigation.navigate('DriverSignupScreen');
-        }}>
-        <Text style={styles.driverButtonText}>BECOME A DRIVER</Text>
-      </TouchableOpacity>
-    </SafeAreaView>
+        <View>
+          <View style={styles.emailInput}>
+            <TextInput
+              style={{
+                marginLeft: 10,
+                fontFamily: 'Nunito-Regular',
+                fontSize: 16,
+              }}
+              selectionColor={placeholderTextColor}
+              placeholderTextColor={placeholderTextColor}
+              placeholder="Email or phone number"
+              onChangeText={username => {
+                usernameHandler(username);
+              }}
+            />
+          </View>
+          <View style={styles.passwordInput}>
+            <TextInput
+              style={{
+                marginLeft: 10,
+                fontFamily: 'Nunito-Regular',
+                fontSize: 16,
+              }}
+              selectionColor={placeholderTextColor}
+              placeholderTextColor={placeholderTextColor}
+              placeholder="Password"
+              secureTextEntry={visibilityControl()}
+              onChangeText={password => {
+                passwordHandler(password);
+              }}
+            />
+            {visibility ? (
+              <TouchableOpacity
+                style={{
+                  width: 20,
+                  height: 20,
+                  marginLeft: 'auto',
+                  marginRight: 15,
+                }}
+                onPress={() => {
+                  setVisibility(false);
+                }}>
+                <Image
+                  source={require('../../assets/visibility.png')}
+                  style={{
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              </TouchableOpacity>
+            ) : (
+              <TouchableOpacity
+                style={{
+                  width: 20,
+                  height: 20,
+                  marginLeft: 'auto',
+                  marginRight: 15,
+                }}
+                onPress={() => {
+                  setVisibility(true);
+                }}>
+                <Image
+                  source={require('../../assets/visibility_off.png')}
+                  style={{
+                    width: 20,
+                    height: 20,
+                  }}
+                />
+              </TouchableOpacity>
+            )}
+          </View>
+        </View>
+        <TouchableOpacity
+          style={styles.forgotPasswordContainer}
+          activeOpacity={0.7}
+          onPress={() => {
+            navigation.navigate('ForgotPassword');
+          }}>
+          <Text style={styles.forgotPasswordText}>Forgot password?</Text>
+        </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={styles.signInButtonContainer}
+          onPress={() => {
+            logInHandler();
+            checkTextInput();
+            setLoading(true);
+            // navigation.navigate('TabNavigation');
+          }}>
+          {loading && username.trim() && password.trim() ? (
+            <ActivityIndicator
+              size="large"
+              color={primarybackgroundColor}
+              style={{paddingBottom: 6}}
+            />
+          ) : (
+            <Text style={styles.signInButtonText}>SIGN IN</Text>
+          )}
+        </TouchableOpacity>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={styles.driverButtonContainer}
+          onPress={() => {
+            navigation.navigate('DriverSignupScreen');
+          }}>
+          <Text style={styles.driverButtonText}>BECOME A DRIVER</Text>
+        </TouchableOpacity>
+      </SafeAreaView>
+    </KeyboardAvoidingView>
   );
 };
 
