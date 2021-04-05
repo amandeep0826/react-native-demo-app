@@ -5,19 +5,18 @@ import {backgroundColor} from '../../styles/commonStyle';
 
 const SplashScreen = ({navigation}) => {
   const [token, setToken] = useState(null);
-
   useEffect(() => {
-    const fetchHeader = async () => {
+    const fetchToken = async () => {
       const token = await getToken();
       setToken(token);
-      ShowAlertWithDelay(token);
     };
-    fetchHeader();
+    fetchToken();
+    ShowAlertWithDelay();
     console.log({token});
-  }, []);
+  }, [token]);
 
   const ShowAlertWithDelay = token => {
-    if (token === null) {
+    if (token==null) {
       setTimeout(() => {
         navigation.navigate('DriverLogin');
       }, 2000);

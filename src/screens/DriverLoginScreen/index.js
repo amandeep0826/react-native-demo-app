@@ -7,6 +7,8 @@ import {
   View,
   ActivityIndicator,
   ToastAndroid,
+  SafeAreaView,
+  StatusBar
 } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import api, {DriverLogin, getToken} from '../../api/api';
@@ -15,6 +17,7 @@ import {
   primarybackgroundColor,
   primarycolor,
   pureBlack,
+  secondarybackgroundColor
 } from '../../assets/colors';
 import {backgroundColor} from '../../styles/commonStyle';
 import {styles} from './style';
@@ -52,19 +55,7 @@ const DriverLoginScreen = ({navigation}) => {
       setLoading(false);
       return;
     }
-    //Checked Successfully
-    //Do whatever you want
   };
-  // const [token, setToken] = useState('');
-
-  // const storeData = async (token) => {
-  //   try {
-  //     const jsonValue = JSON.stringify(token);
-  //     await AsyncStorage.setItem('@storage_Key', jsonValue);
-  //   } catch (e) {
-  //     // saving error
-  //   }
-  // };
 
   const usernameHandler = username => {
     setUsername(username);
@@ -113,7 +104,8 @@ const DriverLoginScreen = ({navigation}) => {
   };
 
   return (
-    <View style={backgroundColor.container}>
+    <SafeAreaView style={backgroundColor.container}>
+      <StatusBar backgroundColor={primarybackgroundColor}/>
       <View>
         <Image
           style={styles.mainLogo}
@@ -142,6 +134,7 @@ const DriverLoginScreen = ({navigation}) => {
             selectionColor={placeholderTextColor}
             placeholderTextColor={placeholderTextColor}
             placeholder="Password"
+            secureTextEntry={true}
             onChangeText={password => {
               passwordHandler(password);
             }}
@@ -165,7 +158,7 @@ const DriverLoginScreen = ({navigation}) => {
           setLoading(true);
           // navigation.navigate('TabNavigation');
         }}>
-        {loading ? (
+        {(loading && username.trim() && password.trim())  ? (
           <ActivityIndicator
             size="large"
             color={primarybackgroundColor}
@@ -183,7 +176,7 @@ const DriverLoginScreen = ({navigation}) => {
         }}>
         <Text style={styles.driverButtonText}>BECOME A DRIVER</Text>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 };
 

@@ -199,7 +199,7 @@ const styles = StyleSheet.create({
   cardView: {
     backgroundColor: tertiarybackgroundColor,
     shadowOpacity: 10,
-    alignSelf: 'center',
+    alignSelf: 'stretch',
     borderRadius: 6,
     marginBottom: 41,
     elevation: 3,
