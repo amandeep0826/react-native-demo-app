@@ -16,22 +16,34 @@ const SplashScreen = ({navigation}) => {
     };
     fetchToken();
     ShowAlertWithDelay(token);
-    return token;
   }, []);
 
-  const navigateWithCondition = token => {
+  // const navigateWithCondition = () => {
+  //   if (token == null) {
+  //     navigation.replace('DriverLogin');
+  //   } else {
+  //     navigation.replace('TabNavigation');
+  //   }
+  // };
+
+  // const ShowAlertWithDelay = () => {
+  //   setTimeout(() => {
+  //     navigateWithCondition();
+  //   }, 1500);
+  // };
+
+  const ShowAlertWithDelay = () => {
     if (token == null) {
-      navigation.replace('DriverLogin');
+      setTimeout(() => {
+        navigation.replace('DriverLogin');
+      }, 1500);
     } else {
-      navigation.replace('TabNavigation');
+      setTimeout(() => {
+        navigation.replace('TabNavigation');
+      }, 1500);
     }
   };
 
-  const ShowAlertWithDelay = token => {
-    setTimeout(() => {
-      navigateWithCondition();
-    }, 1500);
-  };
   return (
     <SafeAreaView style={backgroundColor.container}>
       <StatusBar backgroundColor={primarybackgroundColor} />
