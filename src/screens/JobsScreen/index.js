@@ -31,6 +31,7 @@ const JobScreen = ({navigation, ...props}) => {
   const [showLoadmore, setShowLoadmore] = useState(true);
   const [spinner, setSpinner] = useState(false);
   const [itemId, setItemId] = useState('');
+  const [sorting, setSorting] = useState(1);
 
   const dropDownOptions = ['Recent Posted', 'Time', 'Payment', 'Distance'];
 
@@ -38,24 +39,32 @@ const JobScreen = ({navigation, ...props}) => {
     const fetchHeader = async () => {
       const _headers = await getHeaders();
       setHeaders(_headers);
-      getDeliveriesFromAPI(_headers, 1, offset);
+      getDeliveriesFromAPI(_headers, sorting, offset);
     };
     if (deliveriesJobs.length === 0) fetchHeader();
   }, []);
 
-  const getDeliveriesFromAPI = (_headers, sorting, offset) => {
+  const getDeliveriesFromAPI = (_headers, _sorting, _offset) => {
     api
-      .get(Deliveries(sorting, offset), {
+      .get(Deliveries(_sorting, _offset), {
         headers: _headers,
       })
       .then(response => {
         if (response.data.deliveries.length == 0) {
           setShowLoadmore(false);
+          setLoading(false);
           return;
         }
-        const newData = [...deliveriesJobs, ...response.data.deliveries];
+        let newData;
+        if (_sorting !== sorting) {
+          setSorting(_sorting);
+          setOffset(1);
+          newData = response.data.deliveries;
+        } else {
+          newData = [...deliveriesJobs, ...response.data.deliveries];
+          setOffset(offset + 1);
+        }
         setDeliveriesJobs(newData);
-        setOffset(offset + 1);
         setLoading(false);
       })
       .catch(error => {
@@ -158,7 +167,7 @@ const JobScreen = ({navigation, ...props}) => {
               textStyle={styles.TextStyle}
               onSelect={data => {
                 setLoading(true);
-                getDeliveriesFromAPI(headers, data + 1);
+                getDeliveriesFromAPI(headers, data + 1, 1);
               }}
             />
             {/* <Image
@@ -188,13 +197,14 @@ const JobScreen = ({navigation, ...props}) => {
             ListFooterComponent={renderFooter}
             onEndReachedThreshold={0.5}
             onEndReached={() => {
-              getDeliveriesFromAPI(headers, 1, offset);
+              getDeliveriesFromAPI(headers, sorting, offset);
             }}
             refreshControl={
               <RefreshControl
                 refreshing={loading}
                 onRefresh={() => {
-                  getDeliveriesFromAPI(headers, 1);
+                  setOffset(1);
+                  getDeliveriesFromAPI(headers, sorting, offset);
                 }}
               />
             }

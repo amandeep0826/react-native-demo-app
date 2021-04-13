@@ -1,30 +1,27 @@
-import React, {useState, useEffect, useContext} from 'react';
+import React, {useContext, useEffect, useState} from 'react';
 import {
-  Button,
-  Text,
-  View,
-  StyleSheet,
-  Image,
-  TouchableOpacity,
-  ToastAndroid,
   Alert,
+  Image,
   SafeAreaView,
   StatusBar,
+  StyleSheet,
+  Text,
+  ToastAndroid,
+  TouchableOpacity,
+  View,
 } from 'react-native';
-import {backgroundColor} from '../../styles/commonStyle';
-import {DriverProfile, removeToken, getHeaders, ContactUs} from '../../api/api';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import api, {ContactUs, getHeaders, removeToken} from '../../api/api';
 import {secondarybackgroundColor} from '../../assets/colors';
 import {NunitoFont} from '../../assets/fonts/nunitoFont';
-import api from '../../api/api';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {AuthContext, UserContext} from '../../routes/RootStackNavigation';
+import {backgroundColor} from '../../styles/commonStyle';
 
 const SettingsScreen = ({navigation, driveData}) => {
   const [driverProfile, setDriverProfile] = useState('');
   const [headers, setHeaders] = useState(null);
   const [token, setToken] = useContext(AuthContext);
   const [user, setUser] = useContext(UserContext);
-  // const [userData, setUserData] = useState('');
 
   useEffect(() => {
     const fetchHeader = async () => {
@@ -33,27 +30,11 @@ const SettingsScreen = ({navigation, driveData}) => {
     };
     fetchHeader();
   }, []);
-  console.log(user);
 
-  // const userData = user;
-
-  // function getDriverProfileHandler(_headers) {
-  //   api
-  //     .get(DriverProfile, {
-  //       headers: _headers,
-  //     })
-  //     .then(response => {
-  //       setDriverProfile(response.data);
-  //     })
-  //     .catch(error => {
-  //       console.log({error});
-  //     });
-  // }
   const logOut = async () => {
     try {
       const logOutValue = await removeToken();
       if (logOutValue) {
-        // ToastAndroid.show('You are logged out!', ToastAndroid.SHORT);
         Alert.alert('Log out', 'Are you sure you want to log out?', [
           {
             text: 'No',
@@ -65,7 +46,6 @@ const SettingsScreen = ({navigation, driveData}) => {
             onPress: () => setToken(null),
           },
         ]);
-        // setToken(null);
       } else {
         ToastAndroid.show('Error logging out', ToastAndroid.SHORT);
       }

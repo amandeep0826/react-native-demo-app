@@ -59,7 +59,7 @@ export default function JobsCard({
 
         <View style={styles.chargesContainer}>
           {/* <Text>{item.name}</Text> */}
-          <Text style={styles.chargesText}>{item.delivered_charges}</Text>
+          <Text style={styles.chargesText}>$ {item.delivered_charges}</Text>
           {item.time_sensitive == 1 ? (
             <Text style={styles.timeFlexibleText}>Time Flexible</Text>
           ) : (

@@ -1,11 +1,13 @@
 import React, {useState} from 'react';
 import {
+  FlatList,
   Image,
   ScrollView,
   StyleSheet,
   Text,
   TouchableOpacity,
   View,
+  VirtualizedList,
 } from 'react-native';
 import ModalDropdown from 'react-native-modal-dropdown';
 import {
@@ -21,8 +23,13 @@ import {
 } from '../../assets/colors';
 import {NunitoFont} from '../../assets/fonts/nunitoFont';
 import {backgroundColor} from '../../styles/commonStyle';
+import PickUpAddressComponent from './PickUpAddressComponent';
+import DropOffAddressComponent from './DropOffAddressComponent';
 
 const JobDetailScreen = (props, {onAccept}) => {
+  const printFun = () => {
+    console.log(props.route.params.item.dropoffDetails);
+  };
   return (
     <ScrollView style={backgroundColor.container}>
       <View style={styles.nameAndPriceContainer}>
@@ -66,135 +73,54 @@ const JobDetailScreen = (props, {onAccept}) => {
       </View>
       <View style={styles.locationContainer}>
         <Text style={styles.locationText}>LOCATIONS</Text>
-        {/* <AddressComponent
-          pickupAddress=""
-          user_name=""
-          user_phone=""
-          user_apartment=""
-          user_landmark=""
-        /> */}
-        <View style={styles.pickupAddressContainer}>
-          <View style={styles.pickupDotContainer}>
-            <View
-              style={{
-                backgroundColor: primaryGreen,
-                height: 18,
-                width: 18,
-                borderRadius: 10,
-              }}>
-              <View
-                style={{
-                  backgroundColor: pureWhite,
-                  alignSelf: 'center',
-                  height: 8,
-                  width: 8,
-                  borderRadius: 10,
-                  marginTop: 5,
-                }}></View>
-            </View>
-            <Text style={styles.pickupPointText}>PICKUP POINT</Text>
-          </View>
-
-          <View style={styles.pickupDetailsContainer}>
-            <View style={styles.verticalDash}></View>
-            <View style={styles.pickupAddress}>
-              <View style={styles.addressContainer}>
-                <Text style={styles.address}>
-                  {props.route.params.item.pickupDetails[0].address}
-                </Text>
+        <PickUpAddressComponent
+          pickupAddress={props.route.params.item.pickupDetails[0].address}
+          user_name={props.route.params.item.pickupDetails[0].user_name}
+          user_phone={props.route.params.item.pickupDetails[0].user_phone}
+          user_apartment={
+            props.route.params.item.pickupDetails[0].user_apartment
+          }
+          user_landmark={props.route.params.item.pickupDetails[0].user_landmark}
+        />
+        <FlatList
+          data={props.route.params.item.dropoffDetails}
+          showsVerticalScrollIndicator={false}
+          ListHeaderComponent={() => {
+            return (
+              <View style={styles.dropoffDotContainer}>
+                <View
+                  style={{
+                    backgroundColor: primaryDarkBlue,
+                    height: 18,
+                    width: 18,
+                    borderRadius: 10,
+                  }}>
+                  <View
+                    style={{
+                      backgroundColor: pureWhite,
+                      alignSelf: 'center',
+                      height: 8,
+                      width: 8,
+                      borderRadius: 10,
+                      marginTop: 5,
+                    }}></View>
+                </View>
+                {props.route.params.item.dropoffDetails.length > 1 ? (
+                  <Text style={styles.pickupPointText}>
+                    {props.route.params.item.dropoffDetails.length} DROP OFF
+                    POINTS
+                  </Text>
+                ) : (
+                  <Text style={styles.pickupPointText}>DROP OFF POINT</Text>
+                )}
               </View>
-              <View style={[styles.pickupOtherDetails, {marginTop: 4}]}>
-                <Text style={styles.otherPickupDetails}>
-                  {props.route.params.item.pickupDetails[0].user_name}{' '}
-                </Text>
-                <Text style={styles.otherPickupDetails}>
-                  ({props.route.params.item.pickupDetails[0].user_phone}),{' '}
-                </Text>
-                <Text style={styles.otherPickupDetails}>
-                  {props.route.params.item.pickupDetails[0].user_apartment},{' '}
-                </Text>
-                <Text style={styles.otherPickupDetails}>
-                  {props.route.params.item.pickupDetails[0].user_landmark}
-                </Text>
-              </View>
-            </View>
-            <View style={styles.iconsContainer}>
-              <TouchableOpacity activeOpacity={0.7}>
-                <Image
-                  style={styles.navigationButton}
-                  source={require('../../assets/navigation.png')}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity activeOpacity={0.7}>
-                <Image
-                  style={styles.callButton}
-                  source={require('../../assets/call.png')}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
-        <View style={styles.pickupAddressContainer}>
-          <View style={styles.dropoffDotContainer}>
-            <View
-              style={{
-                backgroundColor: primaryDarkBlue,
-                height: 18,
-                width: 18,
-                borderRadius: 10,
-              }}>
-              <View
-                style={{
-                  backgroundColor: pureWhite,
-                  alignSelf: 'center',
-                  height: 8,
-                  width: 8,
-                  borderRadius: 10,
-                  marginTop: 5,
-                }}></View>
-            </View>
-            <Text style={styles.pickupPointText}>DROP OFF POINT</Text>
-          </View>
-
-          <View style={styles.pickupDetailsContainer}>
-            <View style={styles.dropoffAddress}>
-              <View style={styles.addressContainer}>
-                <Text style={styles.address}>
-                  {props.route.params.item.dropoffDetails[0].address}
-                </Text>
-              </View>
-              <View style={[styles.dropoffOtherDetails, {marginTop: 4}]}>
-                <Text style={styles.otherDropoffDetails}>
-                  {props.route.params.item.dropoffDetails[0].user_name}{' '}
-                </Text>
-                <Text style={styles.otherDropoffDetails}>
-                  ({props.route.params.item.dropoffDetails[0].user_phone}),{' '}
-                </Text>
-                <Text style={styles.otherDropoffDetails}>
-                  {props.route.params.item.dropoffDetails[0].user_apartment},{' '}
-                </Text>
-                <Text
-                  style={[styles.otherDropoffDetails, {marginBottom: 20.5}]}>
-                  {props.route.params.item.dropoffDetails[0].user_landmark}
-                </Text>
-              </View>
-            </View>
-            <View style={styles.iconsContainer}>
-              <TouchableOpacity activeOpacity={0.7}>
-                <Image
-                  style={styles.navigationButton}
-                  source={require('../../assets/navigation.png')}
-                />
-              </TouchableOpacity>
-              <TouchableOpacity activeOpacity={0.7}>
-                <Image
-                  style={styles.callButton}
-                  source={require('../../assets/call.png')}
-                />
-              </TouchableOpacity>
-            </View>
-          </View>
-        </View>
+            );
+          }}
+          keyExtractor={(item, index) => 'key' + index}
+          renderItem={({item}) => {
+            return <DropOffAddressComponent item={item} />;
+          }}
+        />
       </View>
       <View style={styles.packageTypeContainer}>
         <Text style={styles.packageTypeText}>PACKAGE TYPE</Text>
@@ -214,7 +140,8 @@ const JobDetailScreen = (props, {onAccept}) => {
           activeOpacity={0.7}
           style={styles.acceptButtonContainer}
           onPress={() => {
-            onAccept();
+            // onAccept();
+            printFun();
           }}>
           <Text style={styles.acceptButtonText}>ACCEPT</Text>
         </TouchableOpacity>
@@ -400,6 +327,7 @@ export const styles = StyleSheet.create({
     flexDirection: 'row',
     marginTop: 6.5,
     marginLeft: 20,
+    marginBottom: 17,
   },
   addressContainer: {
     marginTop: 4,

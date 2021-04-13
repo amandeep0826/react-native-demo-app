@@ -1,6 +1,7 @@
 import React, {useEffect, useState, useContext} from 'react';
 import {
   ActivityIndicator,
+  Alert,
   Image,
   ScrollView,
   TouchableOpacity,
@@ -26,6 +27,24 @@ const EditProfileScreen = () => {
   const [user, setUser] = useContext(UserContext);
 
   // const [name, setName] = useState('');
+
+  const changeProfilePhoto = () => {
+    Alert.alert('Add Photo', ' ', [
+      {
+        text: 'Take Photo',
+        onPress: () => openCamera(),
+      },
+      {
+        text: 'Choose from Gallery',
+        onPress: () => chooseFromPhone(),
+      },
+      {
+        text: 'Cancel',
+        onPress: () => console.log('Cancelled Photo Selection'),
+        style: 'cancel',
+      },
+    ]);
+  };
 
   const chooseFromPhone = () => {
     ImagePicker.openPicker({
@@ -142,7 +161,7 @@ const EditProfileScreen = () => {
           <TouchableOpacity
             style={styles.imagePicker}
             onPress={() => {
-              chooseFromPhone();
+              changeProfilePhoto();
             }}>
             <MaterialCommunityIcons
               style={styles.cameraIcon}
