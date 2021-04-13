@@ -12,6 +12,11 @@ export const DeliveriesByTime = 'driver/deliveries?status=1&sorting=2&page=1';
 export const getToken = async () => {
   return await AsyncStorage.getItem('token');
 };
+export const getUserData = async () => {
+  const user = await AsyncStorage.getItem('user');
+
+  return JSON.parse(user);
+};
 
 export const removeItemValue = async key => {
   try {

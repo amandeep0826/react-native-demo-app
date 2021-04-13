@@ -1,13 +1,11 @@
 import React, {useEffect, useState} from 'react';
-import {Image, SafeAreaView, StyleSheet, View, StatusBar} from 'react-native';
+import {Image, SafeAreaView, StatusBar, StyleSheet} from 'react-native';
+import SplashScreen from 'react-native-splash-screen';
 import {getToken} from '../../api/api';
-import {
-  primarybackgroundColor,
-  secondarybackgroundColor,
-} from '../../assets/colors';
+import {primarybackgroundColor} from '../../assets/colors';
 import {backgroundColor} from '../../styles/commonStyle';
 
-const SplashScreen = ({navigation}) => {
+const SplashScreenScreen = ({navigation}) => {
   const [token, setToken] = useState(null);
   useEffect(() => {
     const fetchToken = async () => {
@@ -15,34 +13,18 @@ const SplashScreen = ({navigation}) => {
       setToken(token);
     };
     fetchToken();
-    ShowAlertWithDelay(token);
+    NavigationHandler();
   }, []);
 
-  // const navigateWithCondition = () => {
-  //   if (token == null) {
-  //     navigation.replace('DriverLogin');
-  //   } else {
-  //     navigation.replace('TabNavigation');
-  //   }
-  // };
-
-  // const ShowAlertWithDelay = () => {
-  //   setTimeout(() => {
-  //     navigateWithCondition();
-  //   }, 1500);
-  // };
-
-  const ShowAlertWithDelay = () => {
+  const NavigationHandler = () => {
     if (token == null) {
       setTimeout(() => {
         navigation.replace('DriverLogin');
       }, 1500);
-    } else {
-      setTimeout(() => {
-        navigation.replace('TabNavigation');
-      }, 1500);
     }
   };
+
+  // SplashScreen.hide();
 
   return (
     <SafeAreaView style={backgroundColor.container}>
@@ -64,4 +46,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default SplashScreen;
+export default SplashScreenScreen;

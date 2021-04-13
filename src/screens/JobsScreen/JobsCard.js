@@ -7,51 +7,19 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
-import {NunitoFont} from '../../assets/fonts/nunitoFont';
-import {DeliveryTitleComponent} from './DeliveryTItleComponent';
-import {OrderTitleComponent} from './OrderTitleComponent';
-import api, {AcceptDelivery, getHeaders, getToken} from '../../api/api';
+import Spinner from 'react-native-loading-spinner-overlay';
 import {pureBlack, tertiarybackgroundColor} from '../../assets/colors';
+import {NunitoFont} from '../../assets/fonts/nunitoFont';
 
 const {width, height} = Dimensions.get('window');
 
-export default function JobsCard({item, onPress}) {
-  const [headers, setHeaders] = useState(null);
-
-  useEffect(() => {
-    const fetchHeader = async () => {
-      const _headers = await getHeaders();
-      setHeaders(_headers);
-    };
-    fetchHeader();
-  }, []);
-
-  function acceptDeliveryHandler() {
-    api
-      .put(
-        AcceptDelivery,
-        {
-          delivery_id: 0,
-          job_type: 0,
-          pickup_time: 'string',
-          estimated_time: 0,
-        },
-        {
-          headers: headers,
-        },
-      )
-      .then(response => {
-        // console.log({response});
-        alert('Delivery accepted successfully.');
-      })
-      .catch(error => {
-        console.log({error});
-        // console.log({headers});
-      });
-  }
-
-  // console.log(_headers);
-
+export default function JobsCard({
+  item,
+  onPress,
+  onAccept,
+  setSpinner,
+  spinnerControl,
+}) {
   return (
     <TouchableOpacity
       style={styles.cardView}
@@ -75,9 +43,16 @@ export default function JobsCard({item, onPress}) {
             }}
           />
           <View style={styles.nameContainer}>
-            {/* <Text>{item.name}</Text> */}
-            <Text style={styles.johnDoeText}>John Doe</Text>
-            <Text style={styles.singleDeliveryText}>Single Delivery</Text>
+            <Text style={styles.johnDoeText}>
+              {item.pickupDetails[0].user_name}
+            </Text>
+            {item.deliver_type_id == 1 ? (
+              <Text style={styles.singleDeliveryText}>Single Delivery</Text>
+            ) : item.deliver_type_id == 2 ? (
+              <Text>Return Delivery</Text>
+            ) : (
+              <Text>Traxi Run</Text>
+            )}
           </View>
         </View>
         {/* <Image style={styles.image}/> */}
@@ -85,7 +60,11 @@ export default function JobsCard({item, onPress}) {
         <View style={styles.chargesContainer}>
           {/* <Text>{item.name}</Text> */}
           <Text style={styles.chargesText}>{item.delivered_charges}</Text>
-          <Text style={styles.timeFlexibleText}>Time Flexible</Text>
+          {item.time_sensitive == 1 ? (
+            <Text style={styles.timeFlexibleText}>Time Flexible</Text>
+          ) : (
+            <Text style={styles.timeFlexibleText}>Time Sensitive</Text>
+          )}
         </View>
       </View>
       <View style={{backgroundColor: '#FFDE67', height: 2, padding: 1}}></View>
@@ -128,11 +107,9 @@ export default function JobsCard({item, onPress}) {
         </View>
         <View style={styles.pickUpPointContainer}>
           <View style={styles.dashedLine}></View>
-          <View style={{}}>
-            <Text style={styles.pickupPoint}>
-              {item.pickupDetails[0].address}
-            </Text>
-          </View>
+          <Text style={styles.pickupPoint}>
+            {item.pickupDetails[0].address}
+          </Text>
         </View>
         <View style={{flexDirection: 'row', marginTop: 3.5}}>
           <View
@@ -153,17 +130,29 @@ export default function JobsCard({item, onPress}) {
                 marginTop: 5,
               }}></View>
           </View>
-          <Text style={styles.pickupPointText}>DROPOFF POINT</Text>
+          {item.dropoffDetails.length > 1 ? (
+            <Text style={styles.pickupPointText}>
+              {item.dropoffDetails.length} DROP OFF POINTS
+            </Text>
+          ) : (
+            <Text style={styles.pickupPointText}>DROP OFF POINT</Text>
+          )}
         </View>
-        <Text style={styles.dropoffPoint}>
-          {item.dropoffDetails[0].address}
-        </Text>
+        {item.dropoffDetails.length == 1 ? (
+          <Text style={styles.dropoffPoint}>
+            {item.dropoffDetails[0].address}
+          </Text>
+        ) : (
+          <Text></Text>
+        )}
       </View>
       <TouchableOpacity
         activeOpacity={0.7}
         style={styles.acceptButtonContainer}
         onPress={() => {
-          acceptDeliveryHandler();
+          onAccept();
+          setSpinner(true);
+          spinnerControl();
         }}>
         <Text style={styles.acceptButtonText}>ACCEPT</Text>
       </TouchableOpacity>

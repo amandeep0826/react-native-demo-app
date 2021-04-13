@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   ScrollView,
   Text,
@@ -72,63 +72,47 @@ const DriverSignupScreen = ({navigation}) => {
           Please send your personal information.
         </Text>
       </View>
-      <View>
-        <View style={{marginLeft: 20, paddingTop: 30}}>
-          <Text style={styles.aboveInputText}>Name</Text>
-        </View>
-        <View style={styles.inputfields}>
-          <TextInput
-            selectionColor={placeholderTextColor}
-            style={styles.inputStyle}
-            placeholder="Enter your name"
-            placeholderTextColor={placeholderTextColor}
-            onChangeText={name => {
-              nameHandler(name);
-            }}
-          />
-        </View>
-        <View style={{marginLeft: 20, marginTop: 20}}>
-          <Text style={styles.aboveInputText}>Phone Number</Text>
-        </View>
-        <View style={styles.inputfields}>
-          <TextInput
-            selectionColor={placeholderTextColor}
-            style={styles.inputStyle}
-            placeholder="Enter your number"
-            placeholderTextColor={placeholderTextColor}
-            onChangeText={phoneNumber => {
-              phoneNumberHandler(phoneNumber);
-            }}
-          />
-        </View>
-        <View style={{marginLeft: 20, marginTop: 20}}>
-          <Text style={styles.aboveInputText}>Email</Text>
-        </View>
-        <View style={styles.inputfields}>
-          <TextInput
-            selectionColor={placeholderTextColor}
-            style={styles.inputStyle}
-            placeholder="Enter your email"
-            placeholderTextColor={placeholderTextColor}
-            onChangeText={email => {
-              emailHandler(email);
-            }}
-          />
-        </View>
-        <View style={{marginLeft: 20, marginTop: 20}}>
-          <Text style={styles.aboveInputText}>Message</Text>
-        </View>
-        <View style={styles.inputfields}>
-          <TextInput
-            selectionColor={placeholderTextColor}
-            style={styles.typeMessageInput}
-            placeholder="Please type message..."
-            placeholderTextColor={placeholderTextColor}
-            onChangeText={message => {
-              messageHandler(message);
-            }}
-          />
-        </View>
+      <View style={styles.inputBoxContainer}>
+        <Text style={styles.aboveInputText}>Name</Text>
+        <TextInput
+          selectionColor={placeholderTextColor}
+          style={styles.inputStyle}
+          placeholder="Enter your name"
+          placeholderTextColor={placeholderTextColor}
+          onChangeText={name => {
+            nameHandler(name);
+          }}
+        />
+        <Text style={styles.aboveInputText}>Phone Number</Text>
+        <TextInput
+          selectionColor={placeholderTextColor}
+          style={styles.inputStyle}
+          placeholder="Enter your number"
+          placeholderTextColor={placeholderTextColor}
+          onChangeText={phoneNumber => {
+            phoneNumberHandler(phoneNumber);
+          }}
+        />
+        <Text style={styles.aboveInputText}>Email</Text>
+        <TextInput
+          selectionColor={placeholderTextColor}
+          style={styles.inputStyle}
+          placeholder="Enter your email"
+          placeholderTextColor={placeholderTextColor}
+          onChangeText={email => {
+            emailHandler(email);
+          }}
+        />
+        <Text style={styles.aboveInputText}>Message</Text>
+        <TextInput
+          selectionColor={placeholderTextColor}
+          style={styles.typeMessageInput}
+          placeholder="Please type message..."
+          placeholderTextColor={placeholderTextColor}
+          onChangeText={message => {
+            messageHandler(message);
+          }}
+        />
       </View>
       <TouchableOpacity
         style={styles.submitButtonContainer}

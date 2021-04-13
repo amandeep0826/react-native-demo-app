@@ -44,6 +44,7 @@ const ForgotPassword = ({navigation}) => {
         if (!email.trim()) {
           ToastAndroid.show('Please enter your email', ToastAndroid.SHORT);
         }
+        console.log({error});
       });
   };
 
@@ -55,16 +56,14 @@ const ForgotPassword = ({navigation}) => {
           Please enter your email address.
         </Text>
       </View>
-      <View style={styles.emailInputField}>
-        <TextInput
-          style={{marginLeft: 10, fontFamily: 'Nunito-Regular', fontSize: 16}}
-          placeholderTextColor="#000000"
-          placeholder="Email address"
-          onChangeText={email => {
-            emailHandler(email);
-          }}
-        />
-      </View>
+      <TextInput
+        style={[styles.emailInputField]}
+        placeholderTextColor="#000000"
+        placeholder="Email address"
+        onChangeText={email => {
+          emailHandler(email);
+        }}
+      />
       <TouchableOpacity
         style={styles.resetButtonContainer}
         onPress={() => {

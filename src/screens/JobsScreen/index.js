@@ -12,7 +12,8 @@ import {
   View,
 } from 'react-native';
 import ModalDropdown from 'react-native-modal-dropdown';
-import api, {Deliveries, getHeaders} from '../../api/api';
+import Spinner from 'react-native-loading-spinner-overlay';
+import api, {AcceptDelivery, Deliveries, getHeaders} from '../../api/api';
 import {
   primarybackgroundColor,
   primarycolor,
@@ -28,6 +29,9 @@ const JobScreen = ({navigation, ...props}) => {
   const [loading, setLoading] = useState(true);
   const [offset, setOffset] = useState(1);
   const [showLoadmore, setShowLoadmore] = useState(true);
+  const [spinner, setSpinner] = useState(false);
+  const [itemId, setItemId] = useState('');
+
   const dropDownOptions = ['Recent Posted', 'Time', 'Payment', 'Distance'];
 
   useEffect(() => {
@@ -51,8 +55,6 @@ const JobScreen = ({navigation, ...props}) => {
         }
         const newData = [...deliveriesJobs, ...response.data.deliveries];
         setDeliveriesJobs(newData);
-
-        // setDeliveriesJobs(response.data);
         setOffset(offset + 1);
         setLoading(false);
       })
@@ -61,6 +63,33 @@ const JobScreen = ({navigation, ...props}) => {
       });
   };
 
+  const spinnerControl = () => {
+    setTimeout(() => {
+      setSpinner(false);
+    }, 1000);
+  };
+
+  const acceptDeliveryHandler = item => {
+    api
+      .put(
+        AcceptDelivery,
+        {
+          delivery_id: item.id,
+          job_type: item.job_type,
+          pickup_time: item.pickup_time,
+          estimated_time: item.estimated_delivery_time,
+        },
+        {
+          headers: headers,
+        },
+      )
+      .then(response => {
+        removeJob(item.id);
+      })
+      .catch(error => {
+        console.log({error});
+      });
+  };
   const renderFooter = () => {
     return showLoadmore ? (
       <ActivityIndicator
@@ -71,9 +100,33 @@ const JobScreen = ({navigation, ...props}) => {
     ) : null;
   };
 
+  const removeJob = id => {
+    const newJob = [...deliveriesJobs];
+    const filteredJob = newJob.filter(job => job.id !== id);
+    setDeliveriesJobs(filteredJob);
+  };
+
   return (
     <SafeAreaView style={backgroundColor.mainContainer}>
       <StatusBar backgroundColor={secondarybackgroundColor} />
+      {/* <Spinner
+        visible={spinner}
+        size="large"
+        customIndicator={
+          <View
+            style={{
+              position: 'absolute',
+              left: 0,
+              right: 0,
+              top: 0,
+              bottom: 0,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <ActivityIndicator size="large" color={primarycolor} style={{}} />
+          </View>
+        }
+      /> */}
       <View style={styles.jobsHeader}>
         <Image
           style={styles.mainLogo}
@@ -83,18 +136,39 @@ const JobScreen = ({navigation, ...props}) => {
       <View style={styles.jobsContainer}>
         <View style={styles.sortedBoxContainer}>
           <Text style={styles.sortByText}>Sort By:</Text>
-          <ModalDropdown
-            options={dropDownOptions}
-            defaultValue="Recent Posted"
-            style={styles.modalStyle}
-            dropdownStyle={styles.dropdownStyle}
-            dropdownTextStyle={styles.dropdownTextStyle}
-            textStyle={styles.TextStyle}
-            onSelect={data => {
-              setLoading(true);
-              getDeliveriesFromAPI(headers, data + 1);
-            }}
-          />
+          <View style={{flexDirection: 'row', alignItems: 'center'}}>
+            <ModalDropdown
+              options={dropDownOptions}
+              // children={
+              //   <Image
+              //     style={{
+              //       width: 25,
+              //       height: 25,
+              //       marginLeft: 'auto',
+              //       marginVertical: 6,
+              //       marginRight: 16,
+              //     }}
+              //     source={require('../../assets/drop_down.png')}
+              //   />
+              // }
+              defaultValue="Recent Posted"
+              style={styles.modalStyle}
+              dropdownStyle={styles.dropdownStyle}
+              dropdownTextStyle={styles.dropdownTextStyle}
+              textStyle={styles.TextStyle}
+              onSelect={data => {
+                setLoading(true);
+                getDeliveriesFromAPI(headers, data + 1);
+              }}
+            />
+            {/* <Image
+                style={{
+                  width: 20,
+                  height: 20,
+                }}
+                source={require('../../assets/drop_down.png')}
+              /> */}
+          </View>
         </View>
 
         {loading && deliveriesJobs.length == 0 ? (
@@ -109,6 +183,7 @@ const JobScreen = ({navigation, ...props}) => {
         ) : (
           <FlatList
             data={deliveriesJobs}
+            extraData={deliveriesJobs}
             showsVerticalScrollIndicator={false}
             ListFooterComponent={renderFooter}
             onEndReachedThreshold={0.5}
@@ -129,6 +204,9 @@ const JobScreen = ({navigation, ...props}) => {
             renderItem={({item}) => {
               return (
                 <JobsCard
+                  setSpinner={() => setSpinner()}
+                  spinnerControl={() => spinnerControl()}
+                  onAccept={() => acceptDeliveryHandler(item)}
                   onPress={() => {
                     navigation.navigate('JobsDetailScreen', {item});
                   }}

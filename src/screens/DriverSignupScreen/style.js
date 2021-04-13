@@ -1,4 +1,5 @@
 import {StyleSheet} from 'react-native';
+import {pureWhite} from '../../assets/colors';
 
 export const styles = StyleSheet.create({
   inputfields: {
@@ -22,7 +23,7 @@ export const styles = StyleSheet.create({
 
   submitButtonText: {
     fontSize: 18,
-    color: 'white',
+    color: pureWhite,
     alignSelf: 'center',
     textTransform: 'uppercase',
     fontFamily: 'Nunito-Regular',
@@ -47,20 +48,29 @@ export const styles = StyleSheet.create({
     fontWeight: 'bold',
     fontSize: 14,
     fontFamily: 'Nunito-Regular',
+    marginTop: 20,
   },
 
   inputStyle: {
-    marginLeft: 15,
+    marginTop: 6,
     color: '#000000',
     fontFamily: 'Nunito-Regular',
     fontSize: 16,
+    backgroundColor: 'white',
+    height: 46,
+    paddingStart: 20,
   },
 
   typeMessageInput: {
-    marginLeft: 15,
+    backgroundColor: pureWhite,
     height: 100,
-    textAlignVertical: 'top',
     fontFamily: 'Nunito-Regular',
     fontSize: 16,
+    paddingStart: 20,
+    marginTop: 6,
+    textAlignVertical: 'top',
+  },
+  inputBoxContainer: {
+    padding: 20,
   },
 });

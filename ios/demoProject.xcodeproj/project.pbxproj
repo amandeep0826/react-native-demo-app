@@ -13,6 +13,7 @@
 		13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 13B07FB51A68108700A75B9A /* Images.xcassets */; };
 		13B07FC11A68108700A75B9A /* main.m in Sources */ = {isa = PBXBuildFile; fileRef = 13B07FB71A68108700A75B9A /* main.m */; };
 		7E7031B372BE61D3269D4143 /* libPods-demoProject-demoProjectTests.a in Frameworks */ = {isa = PBXBuildFile; fileRef = C567DE190B73FBEAECB25A79 /* libPods-demoProject-demoProjectTests.a */; };
+		818E3E80261DC4FE00526E7A /* SplashScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 818E3E7F261DC4FE00526E7A /* SplashScreen.storyboard */; };
 		81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */; };
 		D7E65F6FA32D43BB9BC78528 /* YuseiMagic-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = F66338F7FC1E4430912BCF4E /* YuseiMagic-Regular.ttf */; };
 		E13F11344261454AA938005B /* Nunito-Regular.ttf in Resources */ = {isa = PBXBuildFile; fileRef = AC30FEF11AE44A899CCC20C0 /* Nunito-Regular.ttf */; };
@@ -40,6 +41,7 @@
 		13B07FB71A68108700A75B9A /* main.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = main.m; path = demoProject/main.m; sourceTree = "<group>"; };
 		1A8EFC49E92C0AF74BA94AE9 /* libPods-demoProject.a */ = {isa = PBXFileReference; explicitFileType = archive.ar; includeInIndex = 0; path = "libPods-demoProject.a"; sourceTree = BUILT_PRODUCTS_DIR; };
 		56FA4133D15E3B057AE02043 /* Pods-demoProject.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-demoProject.debug.xcconfig"; path = "Target Support Files/Pods-demoProject/Pods-demoProject.debug.xcconfig"; sourceTree = "<group>"; };
+		818E3E7F261DC4FE00526E7A /* SplashScreen.storyboard */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; path = SplashScreen.storyboard; sourceTree = "<group>"; };
 		81AB9BB72411601600AC10FF /* LaunchScreen.storyboard */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = file.storyboard; name = LaunchScreen.storyboard; path = demoProject/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		AC30FEF11AE44A899CCC20C0 /* Nunito-Regular.ttf */ = {isa = PBXFileReference; explicitFileType = undefined; fileEncoding = 9; includeInIndex = 0; lastKnownFileType = unknown; name = "Nunito-Regular.ttf"; path = "../src/assets/fonts/Nunito-Regular.ttf"; sourceTree = "<group>"; };
 		C1874B826EA8E7E8FA5625F5 /* Pods-demoProject-demoProjectTests.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-demoProject-demoProjectTests.release.xcconfig"; path = "Target Support Files/Pods-demoProject-demoProjectTests/Pods-demoProject-demoProjectTests.release.xcconfig"; sourceTree = "<group>"; };
@@ -91,6 +93,7 @@
 			isa = PBXGroup;
 			children = (
 				13B07FAF1A68108700A75B9A /* AppDelegate.h */,
+				818E3E7F261DC4FE00526E7A /* SplashScreen.storyboard */,
 				13B07FB01A68108700A75B9A /* AppDelegate.m */,
 				13B07FB51A68108700A75B9A /* Images.xcassets */,
 				13B07FB61A68108700A75B9A /* Info.plist */,
@@ -259,6 +262,7 @@
 				81AB9BB82411601600AC10FF /* LaunchScreen.storyboard in Resources */,
 				13B07FBF1A68108700A75B9A /* Images.xcassets in Resources */,
 				E13F11344261454AA938005B /* Nunito-Regular.ttf in Resources */,
+				818E3E80261DC4FE00526E7A /* SplashScreen.storyboard in Resources */,
 				D7E65F6FA32D43BB9BC78528 /* YuseiMagic-Regular.ttf in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -500,6 +504,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = GFSZHD28XL;
 				ENABLE_BITCODE = NO;
 				INFOPLIST_FILE = demoProject/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
@@ -526,6 +531,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CLANG_ENABLE_MODULES = YES;
 				CURRENT_PROJECT_VERSION = 1;
+				DEVELOPMENT_TEAM = GFSZHD28XL;
 				INFOPLIST_FILE = demoProject/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",

@@ -1,20 +1,30 @@
-import React, {useEffect, useState} from 'react';
-import {Image, ScrollView, View, Button, TouchableOpacity} from 'react-native';
+import React, {useEffect, useState, useContext} from 'react';
+import {
+  ActivityIndicator,
+  Image,
+  ScrollView,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import ImagePicker from 'react-native-image-crop-picker';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import api, {
   DriverProfile,
   getHeaders,
   UpdateDriverProfile,
 } from '../../api/api';
+import {primarybackgroundColor, primarycolor} from '../../assets/colors';
+import {UserContext} from '../../routes/RootStackNavigation';
 import {backgroundColor} from '../../styles/commonStyle';
 import NameCard from './ProfileDetailsCard';
-import ImagePicker from 'react-native-image-crop-picker';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
 import {styles} from './styles';
 
 const EditProfileScreen = () => {
   const [driverProfile, setDriverProfile] = useState('');
   const [headers, setHeaders] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [user, setUser] = useContext(UserContext);
+
   // const [name, setName] = useState('');
 
   const chooseFromPhone = () => {
@@ -82,6 +92,7 @@ const EditProfileScreen = () => {
       })
       .then(response => {
         console.log({response});
+        setIsLoading(false);
       })
       .catch(error => {
         console.log({error});
@@ -91,6 +102,16 @@ const EditProfileScreen = () => {
 
   return (
     <ScrollView style={backgroundColor.container}>
+      {/* {isLoading == true ? (
+        <ActivityIndicator
+          size="large"
+          color={primarycolor}
+          style={{
+            marginTop: 20,
+            backgroundColor: primarybackgroundColor,
+          }}
+        />
+      ) : ( */}
       <View style={styles.bodyContainer}>
         {/* <Button
           title="CHoose from phone"
@@ -138,7 +159,7 @@ const EditProfileScreen = () => {
             }}
             iconName="account"
             title="Name"
-            value={driverProfile.name}
+            value={user.user.name}
           />
           <NameCard
             onSave={email => {
@@ -146,7 +167,7 @@ const EditProfileScreen = () => {
             }}
             iconName="email"
             title="Email"
-            value={driverProfile.email}
+            value={user.user.email}
           />
           <NameCard
             onSave={phone => {
@@ -154,11 +175,12 @@ const EditProfileScreen = () => {
             }}
             iconName="phone"
             title="Phone Number"
-            value={driverProfile.phone}
+            value={user.user.phone}
           />
           <NameCard iconName="lock" title="Password" value="******" />
         </View>
       </View>
+      {/* )} */}
     </ScrollView>
   );
 };

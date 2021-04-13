@@ -96,11 +96,9 @@ export const styles = StyleSheet.create({
 
   forgotPasswordText: {
     textAlign: 'right',
-    paddingRight: 20,
+    paddingHorizontal: 20,
     marginTop: 12,
     fontSize: 14,
   },
-  forgotPasswordContainer: {
-    padding: 5,
-  },
+  forgotPasswordContainer: {},
 });

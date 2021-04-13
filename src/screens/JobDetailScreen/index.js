@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {
   Image,
   ScrollView,
@@ -22,7 +22,7 @@ import {
 import {NunitoFont} from '../../assets/fonts/nunitoFont';
 import {backgroundColor} from '../../styles/commonStyle';
 
-const JobDetailScreen = props => {
+const JobDetailScreen = (props, {onAccept}) => {
   return (
     <ScrollView style={backgroundColor.container}>
       <View style={styles.nameAndPriceContainer}>
@@ -34,14 +34,20 @@ const JobDetailScreen = props => {
           }}
         />
         <View style={styles.nameContainer}>
-          <Text style={styles.johnDoeText}>John Doe</Text>
+          <Text style={styles.johnDoeText}>
+            {props.route.params.item.pickupDetails[0].user_name}
+          </Text>
           <Text styles={styles.singleDeliveryText}>Single Delivery</Text>
         </View>
         <View style={styles.chargesContainer}>
           <Text style={styles.chargesText}>
             ${props.route.params.item.delivered_charges}
           </Text>
-          <Text style={styles.timeFlexibleText}>Time Flexible</Text>
+          {props.route.params.item.time_sensitive == 1 ? (
+            <Text style={styles.timeFlexibleText}>Time Flexible</Text>
+          ) : (
+            <Text style={styles.timeFlexibleText}>Time Sensitive</Text>
+          )}
         </View>
       </View>
       <View style={styles.pickUpContainer}>
@@ -203,7 +209,18 @@ const JobDetailScreen = props => {
           eiusmod tempor incididunt ut labore et dolore magna aliqua.
         </Text>
       </View>
-      <View style={styles.deliveryStatusContainer}>
+      <View style={styles.accepOrDeliverContainer}>
+        <TouchableOpacity
+          activeOpacity={0.7}
+          style={styles.acceptButtonContainer}
+          onPress={() => {
+            onAccept();
+          }}>
+          <Text style={styles.acceptButtonText}>ACCEPT</Text>
+        </TouchableOpacity>
+      </View>
+
+      {/* <View style={styles.deliveryStatusContainer}>
         <Text style={styles.deliveryStatusText}>Delivery Status</Text>
         <View style={styles.statusDropDownContainer}>
           <ModalDropdown
@@ -218,7 +235,7 @@ const JobDetailScreen = props => {
             textStyle={styles.TextStyle}
           />
         </View>
-      </View>
+      </View> */}
     </ScrollView>
   );
 };
@@ -485,6 +502,24 @@ export const styles = StyleSheet.create({
     backgroundColor: tertiarybackgroundColor,
   },
   dropoffAddressContainer: {},
+  accepOrDeliverContainer: {
+    padding: 20,
+  },
+  acceptButtonContainer: {
+    elevation: 3,
+    backgroundColor: '#FF148E',
+    borderRadius: 4,
+    paddingVertical: 8,
+    height: 42,
+  },
+  acceptButtonText: {
+    fontSize: 14,
+    color: 'white',
+    alignSelf: 'center',
+    textTransform: 'uppercase',
+    fontFamily: 'Nunito-Regular',
+    fontWeight: 'bold',
+  },
 });
 
 export default JobDetailScreen;

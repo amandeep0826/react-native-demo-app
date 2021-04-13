@@ -13,10 +13,12 @@ const TabNavigation = () => {
   return (
     <Tab.Navigator
       shifting={false}
+      backBehavior="initialRoute"
       barStyle={{backgroundColor: '#FFF6C7', height: 58}}
       activeColor={primarycolor}
       inactiveColor="black"
-      style={{backgroundColor: 'tomato'}}>
+      style={{backgroundColor: 'tomato'}}
+      initialRouteName="JobScreen">
       <Tab.Screen
         options={{
           inactiveColor: 'black',

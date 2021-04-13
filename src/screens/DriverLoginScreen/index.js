@@ -1,50 +1,44 @@
-import React, {useEffect, useState} from 'react';
-import {
-  Image,
-  Text,
-  TextInput,
-  TouchableOpacity,
-  View,
-  ActivityIndicator,
-  ToastAndroid,
-  SafeAreaView,
-  StatusBar,
-  KeyboardAvoidingView,
-} from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNetInfo} from '@react-native-community/netinfo';
-import api, {DriverLogin, getToken} from '../../api/api';
+import Spinner from 'react-native-loading-spinner-overlay';
+import SplashScreen from 'react-native-splash-screen';
+import React, {useContext, useEffect, useState} from 'react';
+import {
+  ActivityIndicator,
+  Image,
+  KeyboardAvoidingView,
+  SafeAreaView,
+  StatusBar,
+  Text,
+  TextInput,
+  ToastAndroid,
+  TouchableOpacity,
+  View,
+} from 'react-native';
+import validator from 'validator';
+import api, {DriverLogin} from '../../api/api';
 import {
   placeholderTextColor,
   primarybackgroundColor,
   primarycolor,
-  pureBlack,
-  secondarybackgroundColor,
 } from '../../assets/colors';
+import {AuthContext, UserContext} from '../../routes/RootStackNavigation';
 import {backgroundColor} from '../../styles/commonStyle';
 import {styles} from './style';
 
 const DriverLoginScreen = ({navigation}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  const [loading, setLoading] = useState(false);
+  // const [loading, setLoading] = useState(false);
   const [visibility, setVisibility] = useState(false);
+  const [spinner, setSpinner] = useState(false);
   const netInfo = useNetInfo();
+  const [token, setToken] = useContext(AuthContext);
+  const [user, setUser] = useContext(UserContext);
 
-  getToken().then(token => {
-    const navigationParam = {
-      index: 0,
-      routes: [{name: 'TabNavigation', params: {token}}],
-    };
-    if (token) {
-      navigation.reset(navigationParam);
-    }
-  });
-
-  useEffect(() => {
-    checkNetwork();
-  }, []);
-
+  // useEffect(() => {
+  //   checkNetwork();
+  // }, []);
   const checkNetwork = () => {
     if (netInfo.isConnected == false) {
       ToastAndroid.show('No Internet detected.', ToastAndroid.SHORT);
@@ -55,18 +49,22 @@ const DriverLoginScreen = ({navigation}) => {
     //Check for the Name TextInput
     if (!username.trim()) {
       ToastAndroid.show('Please enter your email', ToastAndroid.SHORT);
-      setLoading(false);
+      setSpinner(false);
       return;
     }
     //Check for the Email TextInput
     if (!password.trim()) {
       ToastAndroid.show('Please enter your password', ToastAndroid.SHORT);
-      setLoading(false);
+      setSpinner(false);
       return;
     }
     if (!username.trim() && !password.trim()) {
       ToastAndroid.show('Please Enter Email and Password', ToastAndroid.SHORT);
-      setLoading(false);
+      setSpinner(false);
+      return;
+    }
+    if (!validator.isEmail(username)) {
+      ToastAndroid.show('Invalid email format', ToastAndroid.SHORT);
       return;
     }
   };
@@ -87,34 +85,42 @@ const DriverLoginScreen = ({navigation}) => {
     }
   };
 
-  const logInHandler = () => {
-    const req = {email: username, password: password};
-    api
-      .post(
-        DriverLogin,
-        {
-          email: req.email,
-          password: req.password,
-          fcm_id: 'string',
-          device_id: 'string',
-          device_type: 1,
-          app_version: 1.0,
-        },
-        {headers: {'Content-type': 'application/json'}},
-      )
-      .then(response => {
-        const token = response.data.token;
-        storeData(token);
+  const spinnerControl = () => {
+    setTimeout(() => {
+      setSpinner(false);
+    }, 1000);
+  };
 
-        navigation.replace('TabNavigation');
-        return token;
+  const logInHandler = () => {
+    const req = {
+      email: username,
+      password: password,
+      fcm_id: 'string',
+      device_id: 'string',
+      device_type: 1,
+      app_version: 1.0,
+    };
+    api
+      .post(DriverLogin, JSON.stringify(req), {
+        headers: {'Content-type': 'application/json'},
+      })
+      .then(async response => {
+        const token = response.data.token;
+        const user = response.data;
+
+        await storeData(token);
+        setToken(token);
+        await storeUserData(user);
+        setUser(user);
+        // setUser(response.data.user);
+        // return token;
       })
       .catch(error => {
         if (username.trim() && password.trim()) {
           ToastAndroid.show('Email or password incorrect', ToastAndroid.SHORT);
         }
-        setLoading(false);
-        console.log(error);
+        setSpinner(false);
+        console.log({error});
       });
   };
   const storeData = async token => {
@@ -124,11 +130,37 @@ const DriverLoginScreen = ({navigation}) => {
       console.log({e});
     }
   };
+  const storeUserData = async user => {
+    try {
+      await AsyncStorage.setItem('user', JSON.stringify(user));
+    } catch (e) {
+      console.log({e});
+    }
+  };
 
   return (
     <KeyboardAvoidingView
-      behavior={Platform.OS === 'android'}
+      behavior="height"
+      keyboardVerticalOffset={-60}
       style={{flex: 1}}>
+      <Spinner
+        visible={spinner}
+        size="large"
+        customIndicator={
+          <View
+            style={{
+              position: 'absolute',
+              left: 0,
+              right: 0,
+              top: 0,
+              bottom: 0,
+              alignItems: 'center',
+              justifyContent: 'center',
+            }}>
+            <ActivityIndicator size="large" color={primarycolor} style={{}} />
+          </View>
+        }
+      />
       <SafeAreaView style={backgroundColor.container}>
         <StatusBar backgroundColor={primarybackgroundColor} />
         <View>
@@ -165,6 +197,7 @@ const DriverLoginScreen = ({navigation}) => {
                 marginLeft: 10,
                 fontFamily: 'Nunito-Regular',
                 fontSize: 16,
+                paddingRight: 250,
               }}
               selectionColor={placeholderTextColor}
               placeholderTextColor={placeholderTextColor}
@@ -177,10 +210,8 @@ const DriverLoginScreen = ({navigation}) => {
             {visibility ? (
               <TouchableOpacity
                 style={{
-                  width: 20,
-                  height: 20,
+                  padding: 15,
                   marginLeft: 'auto',
-                  marginRight: 15,
                 }}
                 onPress={() => {
                   setVisibility(false);
@@ -196,10 +227,8 @@ const DriverLoginScreen = ({navigation}) => {
             ) : (
               <TouchableOpacity
                 style={{
-                  width: 20,
-                  height: 20,
+                  padding: 15,
                   marginLeft: 'auto',
-                  marginRight: 15,
                 }}
                 onPress={() => {
                   setVisibility(true);
@@ -229,18 +258,32 @@ const DriverLoginScreen = ({navigation}) => {
           onPress={() => {
             logInHandler();
             checkTextInput();
-            setLoading(true);
+
+            if (
+              username.trim() &&
+              password.trim() &&
+              validator.isEmail(username)
+            ) {
+              spinnerControl();
+              setSpinner(true);
+            } else {
+            }
+
+            // setPointerEvent('none');
             // navigation.navigate('TabNavigation');
           }}>
-          {loading && username.trim() && password.trim() ? (
-            <ActivityIndicator
-              size="large"
-              color={primarybackgroundColor}
-              style={{paddingBottom: 6}}
-            />
-          ) : (
-            <Text style={styles.signInButtonText}>SIGN IN</Text>
-          )}
+          {/* {loading &&
+              username.trim() &&
+              password.trim() &&
+              validator.isEmail(username) ? (
+                <ActivityIndicator
+                  size="large"
+                  color={primarybackgroundColor}
+                  style={{paddingBottom: 6}}
+                />
+              ) : ( */}
+          <Text style={styles.signInButtonText}>SIGN IN</Text>
+          {/* )} */}
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.7}
@@ -250,6 +293,7 @@ const DriverLoginScreen = ({navigation}) => {
           }}>
           <Text style={styles.driverButtonText}>BECOME A DRIVER</Text>
         </TouchableOpacity>
+        {/* {loaderScreen()} */}
       </SafeAreaView>
     </KeyboardAvoidingView>
   );

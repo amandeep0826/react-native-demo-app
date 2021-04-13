@@ -5,8 +5,10 @@ export const styles = StyleSheet.create({
     width: '90%',
     alignSelf: 'center',
     borderRadius: 5,
-    marginTop: 18,
     backgroundColor: '#FFFFFF',
+    height: 46,
+    marginTop: 18,
+    paddingStart: 20,
   },
 
   resetButtonContainer: {

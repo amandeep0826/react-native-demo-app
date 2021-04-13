@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from 'react';
+import React, {useState, useEffect, useContext} from 'react';
 import {
   Button,
   Text,
@@ -6,6 +6,10 @@ import {
   StyleSheet,
   Image,
   TouchableOpacity,
+  ToastAndroid,
+  Alert,
+  SafeAreaView,
+  StatusBar,
 } from 'react-native';
 import {backgroundColor} from '../../styles/commonStyle';
 import {DriverProfile, removeToken, getHeaders, ContactUs} from '../../api/api';
@@ -13,41 +17,57 @@ import {secondarybackgroundColor} from '../../assets/colors';
 import {NunitoFont} from '../../assets/fonts/nunitoFont';
 import api from '../../api/api';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {AuthContext, UserContext} from '../../routes/RootStackNavigation';
 
-const SettingsScreen = ({navigation}) => {
+const SettingsScreen = ({navigation, driveData}) => {
   const [driverProfile, setDriverProfile] = useState('');
   const [headers, setHeaders] = useState(null);
+  const [token, setToken] = useContext(AuthContext);
+  const [user, setUser] = useContext(UserContext);
+  // const [userData, setUserData] = useState('');
 
   useEffect(() => {
     const fetchHeader = async () => {
       const _headers = await getHeaders();
       setHeaders(_headers);
-      getDriverProfileHandler(_headers);
     };
-    if (driverProfile === '') fetchHeader();
+    fetchHeader();
   }, []);
+  console.log(user);
 
-  function getDriverProfileHandler(_headers) {
-    api
-      .get(DriverProfile, {
-        headers: _headers,
-      })
-      .then(response => {
-        setDriverProfile(response.data);
-      })
-      .catch(error => {
-        console.log({error});
-        // console.log({headers});
-      });
-  }
+  // const userData = user;
+
+  // function getDriverProfileHandler(_headers) {
+  //   api
+  //     .get(DriverProfile, {
+  //       headers: _headers,
+  //     })
+  //     .then(response => {
+  //       setDriverProfile(response.data);
+  //     })
+  //     .catch(error => {
+  //       console.log({error});
+  //     });
+  // }
   const logOut = async () => {
     try {
       const logOutValue = await removeToken();
       if (logOutValue) {
-        alert('You are logged out!');
-        navigation.replace('DriverLogin');
+        // ToastAndroid.show('You are logged out!', ToastAndroid.SHORT);
+        Alert.alert('Log out', 'Are you sure you want to log out?', [
+          {
+            text: 'No',
+            onPress: () => console.log('Log out cancelled.'),
+            style: 'cancel',
+          },
+          {
+            text: 'YES',
+            onPress: () => setToken(null),
+          },
+        ]);
+        // setToken(null);
       } else {
-        alert('Error logging out');
+        ToastAndroid.show('Error logging out', ToastAndroid.SHORT);
       }
     } catch (error) {
       console.log({error});
@@ -66,25 +86,22 @@ const SettingsScreen = ({navigation}) => {
         },
       )
       .then(response => {
-        // console.log({response});
-        alert('Your message has been posted.');
+        ToastAndroid.show('Your message has been posted', ToastAndroid.SHORT);
       })
       .catch(error => {
         console.log({error});
-        // console.log({headers});
       });
   }
 
-  // const updateProfileHandler = () => {
-  //   api.put()
-  // }
-
   return (
-    <View style={backgroundColor.container}>
+    <SafeAreaView style={backgroundColor.container}>
+      <StatusBar backgroundColor={secondarybackgroundColor} />
+
       <View style={styles.headerContainer}>
         <Text style={styles.settingsText}>Settings</Text>
       </View>
       <View style={styles.bodyContainer}>
+        <View>{driveData}</View>
         <Image
           style={{
             height: 130,
@@ -100,7 +117,7 @@ const SettingsScreen = ({navigation}) => {
           }}
         />
         <View style={styles.editNameContainer}>
-          <Text style={styles.name}>{driverProfile.name}</Text>
+          <Text style={styles.name}>{user.user.name}</Text>
           <MaterialCommunityIcons
             style={styles.pencilIcon}
             name="pencil-plus"
@@ -111,7 +128,7 @@ const SettingsScreen = ({navigation}) => {
             }}
           />
         </View>
-        <Text style={styles.phone}>{driverProfile.phone}</Text>
+        <Text style={styles.phone}>{user.user.phone}</Text>
       </View>
       <TouchableOpacity
         style={styles.contactUsContainer}
@@ -143,7 +160,7 @@ const SettingsScreen = ({navigation}) => {
           <Text style={styles.logOutText}>Log Out</Text>
         </View>
       </TouchableOpacity>
-    </View>
+    </SafeAreaView>
   );
 };
 
