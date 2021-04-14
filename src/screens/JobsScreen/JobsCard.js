@@ -8,8 +8,13 @@ import {
   View,
 } from 'react-native';
 import Spinner from 'react-native-loading-spinner-overlay';
-import {pureBlack, tertiarybackgroundColor} from '../../assets/colors';
+import {
+  dashColor,
+  pureBlack,
+  tertiarybackgroundColor,
+} from '../../assets/colors';
 import {NunitoFont} from '../../assets/fonts/nunitoFont';
+import Dash from 'react-native-dash';
 
 const {width, height} = Dimensions.get('window');
 
@@ -37,10 +42,10 @@ export default function JobsCard({
               marginTop: 18,
               marginLeft: 20,
             }}
-            source={{
-              uri:
-                'https://ca.slack-edge.com/TC9LHABTP-U01J3U0JKHS-129560ba72fa-192',
-            }}
+            // source={{
+            //   uri:
+            //     'https://ca.slack-edge.com/TC9LHABTP-U01J3U0JKHS-129560ba72fa-192',
+            // }}
           />
           <View style={styles.nameContainer}>
             <Text style={styles.johnDoeText}>
@@ -106,7 +111,11 @@ export default function JobsCard({
           <Text style={styles.pickupPointText}>PICKUP POINT</Text>
         </View>
         <View style={styles.pickUpPointContainer}>
-          <View style={styles.dashedLine}></View>
+          {/* <View style={styles.dashedLine}></View> */}
+          <Dash
+            dashStyle={{width: 1, backgroundColor: dashColor}}
+            style={{flexDirection: 'column', marginLeft: 29.5}}
+          />
           <Text style={styles.pickupPoint}>
             {item.pickupDetails[0].address}
           </Text>
@@ -142,9 +151,7 @@ export default function JobsCard({
           <Text style={styles.dropoffPoint}>
             {item.dropoffDetails[0].address}
           </Text>
-        ) : (
-          <Text></Text>
-        )}
+        ) : null}
       </View>
       <TouchableOpacity
         activeOpacity={0.7}
@@ -274,6 +281,7 @@ const styles = StyleSheet.create({
     fontFamily: NunitoFont,
     marginTop: 2,
     marginBottom: 20,
+    width: '80%',
   },
   dropoffPoint: {
     color: '#0031A3',

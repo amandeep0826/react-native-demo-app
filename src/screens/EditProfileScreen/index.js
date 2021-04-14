@@ -1,12 +1,5 @@
-import React, {useEffect, useState, useContext} from 'react';
-import {
-  ActivityIndicator,
-  Alert,
-  Image,
-  ScrollView,
-  TouchableOpacity,
-  View,
-} from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
+import {Alert, Image, ScrollView, TouchableOpacity, View} from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import api, {
@@ -14,7 +7,6 @@ import api, {
   getHeaders,
   UpdateDriverProfile,
 } from '../../api/api';
-import {primarybackgroundColor, primarycolor} from '../../assets/colors';
 import {UserContext} from '../../routes/RootStackNavigation';
 import {backgroundColor} from '../../styles/commonStyle';
 import NameCard from './ProfileDetailsCard';
@@ -23,10 +15,7 @@ import {styles} from './styles';
 const EditProfileScreen = () => {
   const [driverProfile, setDriverProfile] = useState('');
   const [headers, setHeaders] = useState(null);
-  const [isLoading, setIsLoading] = useState(true);
   const [user, setUser] = useContext(UserContext);
-
-  // const [name, setName] = useState('');
 
   const changeProfilePhoto = () => {
     Alert.alert('Add Photo', ' ', [
@@ -66,10 +55,6 @@ const EditProfileScreen = () => {
     });
   };
 
-  // const updateName = () => {
-  //   setName(name);
-  // };
-
   useEffect(() => {
     const fetchHeader = async () => {
       const _headers = await getHeaders();
@@ -89,7 +74,6 @@ const EditProfileScreen = () => {
       })
       .catch(error => {
         console.log({error});
-        // console.log({headers});
       });
   };
 
@@ -111,39 +95,15 @@ const EditProfileScreen = () => {
       })
       .then(response => {
         console.log({response});
-        setIsLoading(false);
       })
       .catch(error => {
         console.log({error});
-        // console.log({headers});
       });
   };
 
   return (
     <ScrollView style={backgroundColor.container}>
-      {/* {isLoading == true ? (
-        <ActivityIndicator
-          size="large"
-          color={primarycolor}
-          style={{
-            marginTop: 20,
-            backgroundColor: primarybackgroundColor,
-          }}
-        />
-      ) : ( */}
       <View style={styles.bodyContainer}>
-        {/* <Button
-          title="CHoose from phone"
-          onPress={() => {
-            chooseFromPhone();
-          }}
-        />
-        <Button
-          title="CHoose from Camera"
-          onPress={() => {
-            openCamera();
-          }}
-        /> */}
         <View style={styles.imageContainer}>
           <Image
             style={{
@@ -199,7 +159,6 @@ const EditProfileScreen = () => {
           <NameCard iconName="lock" title="Password" value="******" />
         </View>
       </View>
-      {/* )} */}
     </ScrollView>
   );
 };

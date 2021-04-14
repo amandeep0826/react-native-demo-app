@@ -1,6 +1,7 @@
 import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
+  Button,
   FlatList,
   Image,
   RefreshControl,
@@ -13,7 +14,12 @@ import {
 } from 'react-native';
 import ModalDropdown from 'react-native-modal-dropdown';
 import Spinner from 'react-native-loading-spinner-overlay';
-import api, {AcceptDelivery, Deliveries, getHeaders} from '../../api/api';
+import api, {
+  AcceptDelivery,
+  acceptDeliveryHandler,
+  Deliveries,
+  getHeaders,
+} from '../../api/api';
 import {
   primarybackgroundColor,
   primarycolor,
@@ -39,35 +45,56 @@ const JobScreen = ({navigation, ...props}) => {
     const fetchHeader = async () => {
       const _headers = await getHeaders();
       setHeaders(_headers);
-      getDeliveriesFromAPI(_headers, sorting, offset);
+      getDeliveriesFromAPI(_headers, sorting, offset).then(response => {
+        setDeliveriesJobs(response.data.deliveries);
+      });
     };
     if (deliveriesJobs.length === 0) fetchHeader();
   }, []);
 
+  const loadMore = () => {
+    getDeliveriesFromAPI(headers, sorting, offset + 1).then(response => {
+      setOffset(offset + 1);
+      if (response.data.deliveries.length == 0) {
+        setShowLoadmore(false);
+        return;
+      }
+      const newData = [...deliveriesJobs, ...response.data.deliveries];
+      setDeliveriesJobs(newData);
+    });
+  };
+
+  const refresh = () => {
+    getDeliveriesFromAPI(headers, sorting, 1).then(response => {
+      setOffset(1);
+      const newData = response.data.deliveries;
+      setDeliveriesJobs(newData);
+    });
+  };
+
+  const changeSorting = _sorting => {
+    if (_sorting === sorting) {
+      return;
+    }
+    getDeliveriesFromAPI(headers, _sorting, 1).then(response => {
+      setOffset(1);
+      setSorting(_sorting);
+      const newData = response.data.deliveries;
+      setDeliveriesJobs(newData);
+    });
+  };
+
   const getDeliveriesFromAPI = (_headers, _sorting, _offset) => {
-    api
+    return api
       .get(Deliveries(_sorting, _offset), {
         headers: _headers,
       })
       .then(response => {
-        if (response.data.deliveries.length == 0) {
-          setShowLoadmore(false);
-          setLoading(false);
-          return;
-        }
-        let newData;
-        if (_sorting !== sorting) {
-          setSorting(_sorting);
-          setOffset(1);
-          newData = response.data.deliveries;
-        } else {
-          newData = [...deliveriesJobs, ...response.data.deliveries];
-          setOffset(offset + 1);
-        }
-        setDeliveriesJobs(newData);
         setLoading(false);
+        return response;
       })
       .catch(error => {
+        setLoading(false);
         console.log({error});
       });
   };
@@ -78,27 +105,6 @@ const JobScreen = ({navigation, ...props}) => {
     }, 1000);
   };
 
-  const acceptDeliveryHandler = item => {
-    api
-      .put(
-        AcceptDelivery,
-        {
-          delivery_id: item.id,
-          job_type: item.job_type,
-          pickup_time: item.pickup_time,
-          estimated_time: item.estimated_delivery_time,
-        },
-        {
-          headers: headers,
-        },
-      )
-      .then(response => {
-        removeJob(item.id);
-      })
-      .catch(error => {
-        console.log({error});
-      });
-  };
   const renderFooter = () => {
     return showLoadmore ? (
       <ActivityIndicator
@@ -118,7 +124,7 @@ const JobScreen = ({navigation, ...props}) => {
   return (
     <SafeAreaView style={backgroundColor.mainContainer}>
       <StatusBar backgroundColor={secondarybackgroundColor} />
-      {/* <Spinner
+      <Spinner
         visible={spinner}
         size="large"
         customIndicator={
@@ -135,7 +141,7 @@ const JobScreen = ({navigation, ...props}) => {
             <ActivityIndicator size="large" color={primarycolor} style={{}} />
           </View>
         }
-      /> */}
+      />
       <View style={styles.jobsHeader}>
         <Image
           style={styles.mainLogo}
@@ -160,6 +166,18 @@ const JobScreen = ({navigation, ...props}) => {
               //     source={require('../../assets/drop_down.png')}
               //   />
               // }
+              // renderRightComponent={
+              //   <Image
+              //     style={{
+              //       width: 25,
+              //       height: 25,
+              //       marginLeft: 'auto',
+              //       marginVertical: 6,
+              //       marginRight: 16,
+              //     }}
+              //     source={require('../../assets/drop_down.png')}
+              //   />
+              // }
               defaultValue="Recent Posted"
               style={styles.modalStyle}
               dropdownStyle={styles.dropdownStyle}
@@ -167,19 +185,20 @@ const JobScreen = ({navigation, ...props}) => {
               textStyle={styles.TextStyle}
               onSelect={data => {
                 setLoading(true);
-                getDeliveriesFromAPI(headers, data + 1, 1);
+                changeSorting(data + 1);
               }}
             />
-            {/* <Image
+            {/* <TouchableOpacity style={{marginLeft: 'auto'}}>
+              <Image
                 style={{
                   width: 20,
                   height: 20,
                 }}
                 source={require('../../assets/drop_down.png')}
-              /> */}
+              />
+            </TouchableOpacity> */}
           </View>
         </View>
-
         {loading && deliveriesJobs.length == 0 ? (
           <ActivityIndicator
             size="large"
@@ -197,14 +216,13 @@ const JobScreen = ({navigation, ...props}) => {
             ListFooterComponent={renderFooter}
             onEndReachedThreshold={0.5}
             onEndReached={() => {
-              getDeliveriesFromAPI(headers, sorting, offset);
+              loadMore();
             }}
             refreshControl={
               <RefreshControl
                 refreshing={loading}
                 onRefresh={() => {
-                  setOffset(1);
-                  getDeliveriesFromAPI(headers, sorting, offset);
+                  refresh();
                 }}
               />
             }
@@ -214,9 +232,13 @@ const JobScreen = ({navigation, ...props}) => {
             renderItem={({item}) => {
               return (
                 <JobsCard
-                  setSpinner={() => setSpinner()}
+                  setSpinner={() => setSpinner(true)}
                   spinnerControl={() => spinnerControl()}
-                  onAccept={() => acceptDeliveryHandler(item)}
+                  onAccept={() =>
+                    acceptDeliveryHandler(item).then(response => {
+                      removeJob(item.id);
+                    })
+                  }
                   onPress={() => {
                     navigation.navigate('JobsDetailScreen', {item});
                   }}

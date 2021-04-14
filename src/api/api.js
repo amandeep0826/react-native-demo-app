@@ -28,6 +28,28 @@ export const removeItemValue = async key => {
   }
 };
 
+export const acceptDeliveryHandler = item => {
+  return api
+    .put(
+      AcceptDelivery,
+      {
+        delivery_id: item.id,
+        job_type: item.job_type,
+        pickup_time: item.pickup_time,
+        estimated_time: item.estimated_delivery_time,
+      },
+      {
+        headers: headers,
+      },
+    )
+    .then(response => {
+      return response;
+    })
+    .catch(error => {
+      console.log({error});
+    });
+};
+
 export const removeToken = async () => {
   return await removeItemValue('token');
 };

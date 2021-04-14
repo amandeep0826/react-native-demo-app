@@ -22,6 +22,7 @@ const SettingsScreen = ({navigation, driveData}) => {
   const [headers, setHeaders] = useState(null);
   const [token, setToken] = useContext(AuthContext);
   const [user, setUser] = useContext(UserContext);
+  const [profileImage, setProfileImage] = useState('');
 
   useEffect(() => {
     const fetchHeader = async () => {
@@ -29,7 +30,16 @@ const SettingsScreen = ({navigation, driveData}) => {
       setHeaders(_headers);
     };
     fetchHeader();
+    profileImageHandler();
   }, []);
+
+  const profileImageHandler = () => {
+    setProfileImage(user.user.profile_image);
+    // console.log(profileImage);
+  };
+
+  let image = user.user.profile_image;
+  // console.log(image);
 
   const logOut = async () => {
     try {
@@ -90,7 +100,9 @@ const SettingsScreen = ({navigation, driveData}) => {
             marginTop: 30,
             alignSelf: 'center',
           }}
-          // source={{uri: driverProfile.profile_image}}
+          // source={{
+          //   uri: `https://app-transfer.com:3001/api-docs//Driver/driverLogin/${image}`,
+          // }}
           source={{
             uri:
               'https://ca.slack-edge.com/TC9LHABTP-U01J3U0JKHS-129560ba72fa-192',

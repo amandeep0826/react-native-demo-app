@@ -1,7 +1,8 @@
 import React from 'react';
 import {Image, Text, TouchableOpacity, View} from 'react-native';
-import {primaryGreen, pureWhite} from '../../assets/colors';
+import {dashColor, primaryGreen, pureWhite} from '../../assets/colors';
 import {styles} from './style';
+import Dash from 'react-native-dash';
 
 const PickUpAddressComponent = (
   {pickupAddress, user_name, user_phone, user_apartment, user_landmark},
@@ -30,7 +31,11 @@ const PickUpAddressComponent = (
         <Text style={styles.pickupPointText}>PICKUP POINT</Text>
       </View>
       <View style={styles.pickUpAddressContainer}>
-        <View style={styles.verticalDash}></View>
+        {/* <View style={styles.verticalDash}></View> */}
+        <Dash
+          dashStyle={{width: 1, backgroundColor: dashColor}}
+          style={{flexDirection: 'column'}}
+        />
         <View style={styles.addressAndOtherDetailsContainer}>
           <Text style={styles.address}>{pickupAddress}</Text>
           <View style={styles.otherPickupDetailsContainer}>

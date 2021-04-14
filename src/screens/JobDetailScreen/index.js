@@ -25,8 +25,10 @@ import {NunitoFont} from '../../assets/fonts/nunitoFont';
 import {backgroundColor} from '../../styles/commonStyle';
 import PickUpAddressComponent from './PickUpAddressComponent';
 import DropOffAddressComponent from './DropOffAddressComponent';
+import SingleDropOffAddressComponent from './SingleDropOffAddressComponent';
+import ReturnDeliveryAddressComponent from './ReturnDeliveryAddressComponent';
 
-const JobDetailScreen = (props, {onAccept}) => {
+const JobDetailScreen = (props, onAccept) => {
   const printFun = () => {
     console.log(props.route.params.item.dropoffDetails);
   };
@@ -35,10 +37,10 @@ const JobDetailScreen = (props, {onAccept}) => {
       <View style={styles.nameAndPriceContainer}>
         <Image
           style={styles.profilePic}
-          source={{
-            uri:
-              'https://ca.slack-edge.com/TC9LHABTP-U01J3U0JKHS-129560ba72fa-192',
-          }}
+          // source={{
+          //   uri:
+          //     'https://ca.slack-edge.com/TC9LHABTP-U01J3U0JKHS-129560ba72fa-192',
+          // }}
         />
         <View style={styles.nameContainer}>
           <Text style={styles.johnDoeText}>
@@ -82,45 +84,101 @@ const JobDetailScreen = (props, {onAccept}) => {
           }
           user_landmark={props.route.params.item.pickupDetails[0].user_landmark}
         />
-        <FlatList
-          data={props.route.params.item.dropoffDetails}
-          showsVerticalScrollIndicator={false}
-          ListHeaderComponent={() => {
-            return (
-              <View style={styles.dropoffDotContainer}>
-                <View
-                  style={{
-                    backgroundColor: primaryDarkBlue,
-                    height: 18,
-                    width: 18,
-                    borderRadius: 10,
-                  }}>
+        {props.route.params.item.deliver_type_id == 1 ? (
+          <SingleDropOffAddressComponent
+            pickupAddress={props.route.params.item.dropoffDetails[0].address}
+            user_name={props.route.params.item.dropoffDetails[0].user_name}
+            user_phone={props.route.params.item.dropoffDetails[0].user_phone}
+            user_apartment={
+              props.route.params.item.dropoffDetails[0].user_apartment
+            }
+            user_landmark={
+              props.route.params.item.dropoffDetails[0].user_landmark
+            }
+          />
+        ) : props.route.params.item.deliver_type_id == 2 ? (
+          <View>
+            <SingleDropOffAddressComponent
+              pickupAddress={props.route.params.item.dropoffDetails[0].address}
+              user_name={props.route.params.item.dropoffDetails[0].user_name}
+              user_phone={props.route.params.item.dropoffDetails[0].user_phone}
+              user_apartment={
+                props.route.params.item.dropoffDetails[0].user_apartment
+              }
+              user_landmark={
+                props.route.params.item.dropoffDetails[0].user_landmark
+              }
+            />
+            <ReturnDeliveryAddressComponent
+              pickupAddress={props.route.params.item.pickupDetails[1].address}
+              user_name={props.route.params.item.pickupDetails[1].user_name}
+              user_phone={props.route.params.item.pickupDetails[1].user_phone}
+              user_apartment={
+                props.route.params.item.pickupDetails[1].user_apartment
+              }
+              user_landmark={
+                props.route.params.item.pickupDetails[1].user_landmark
+              }
+              dropOffAddress={props.route.params.item.dropoffDetails[1].address}
+              delivery_user_name={
+                props.route.params.item.dropoffDetails[1].user_name
+              }
+              delivery_user_phone={
+                props.route.params.item.dropoffDetails[1].user_phone
+              }
+              delivery_user_apartment={
+                props.route.params.item.dropoffDetails[1].user_apartment
+              }
+              delivery_user_landmark={
+                props.route.params.item.dropoffDetails[1].user_landmark
+              }
+            />
+          </View>
+        ) : (
+          <FlatList
+            data={props.route.params.item.dropoffDetails}
+            showsVerticalScrollIndicator={false}
+            ListHeaderComponent={() => {
+              return (
+                <View style={styles.dropoffDotContainer}>
                   <View
                     style={{
-                      backgroundColor: pureWhite,
-                      alignSelf: 'center',
-                      height: 8,
-                      width: 8,
+                      backgroundColor: primaryDarkBlue,
+                      height: 18,
+                      width: 18,
                       borderRadius: 10,
-                      marginTop: 5,
-                    }}></View>
-                </View>
-                {props.route.params.item.dropoffDetails.length > 1 ? (
+                    }}>
+                    <View
+                      style={{
+                        backgroundColor: pureWhite,
+                        alignSelf: 'center',
+                        height: 8,
+                        width: 8,
+                        borderRadius: 10,
+                        marginTop: 5,
+                      }}></View>
+                  </View>
                   <Text style={styles.pickupPointText}>
                     {props.route.params.item.dropoffDetails.length} DROP OFF
                     POINTS
                   </Text>
-                ) : (
-                  <Text style={styles.pickupPointText}>DROP OFF POINT</Text>
-                )}
-              </View>
-            );
-          }}
-          keyExtractor={(item, index) => 'key' + index}
-          renderItem={({item}) => {
-            return <DropOffAddressComponent item={item} />;
-          }}
-        />
+                </View>
+              );
+            }}
+            keyExtractor={(item, index) => 'key' + index}
+            renderItem={({item, index}) => {
+              return (
+                <DropOffAddressComponent
+                  item={item}
+                  index={index}
+                  showDash={
+                    index !== props.route.params.item.dropoffDetails.length - 1
+                  }
+                />
+              );
+            }}
+          />
+        )}
       </View>
       <View style={styles.packageTypeContainer}>
         <Text style={styles.packageTypeText}>PACKAGE TYPE</Text>
@@ -140,8 +198,8 @@ const JobDetailScreen = (props, {onAccept}) => {
           activeOpacity={0.7}
           style={styles.acceptButtonContainer}
           onPress={() => {
-            // onAccept();
-            printFun();
+            onAccept();
+            // printFun();
           }}>
           <Text style={styles.acceptButtonText}>ACCEPT</Text>
         </TouchableOpacity>

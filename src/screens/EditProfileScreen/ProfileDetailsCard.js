@@ -71,8 +71,8 @@ const NameCard = ({iconName, value, title, onSave}) => {
               marginVertical: 18,
             }}
             onPress={() => {
-              // setIsEdit(false);
               onSave(text);
+              setIsEdit(false);
               // printVal();
             }}>
             <Text

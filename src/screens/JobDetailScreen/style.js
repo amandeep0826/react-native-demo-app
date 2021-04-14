@@ -213,7 +213,8 @@ export const styles = StyleSheet.create({
     color: pureBlack,
     flexWrap: 'wrap',
     flex: 1,
-    width: '70%',
+    width: '75%',
+    alignSelf: 'stretch',
   },
   otherPickupDetails: {
     fontSize: 14,
@@ -356,5 +357,27 @@ export const styles = StyleSheet.create({
   addressAndOtherDropoffDetailsContainer: {
     marginBottom: 18.5,
     marginLeft: 18.5,
+  },
+  otherDropOffDetails: {
+    fontSize: 14,
+    fontFamily: NunitoFont,
+    color: iconColor,
+  },
+  returnDeliveryContainer: {
+    borderTopColor: cardBorderColor,
+    borderTopWidth: 1,
+  },
+  verticalDashDropOff: {
+    height: 68,
+    width: 1,
+    backgroundColor: pureBlack,
+    marginLeft: 29.5,
+  },
+  dropOffContainer: {
+    // marginBottom: 20.5,
+  },
+  dropOffDotContainer: {
+    marginLeft: 20,
+    flexDirection: 'row',
   },
 });
