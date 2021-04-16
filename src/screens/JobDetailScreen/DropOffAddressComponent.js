@@ -45,14 +45,19 @@ const DropOffAddressComponent = ({item, index, showDash}) => {
         <View style={styles.addressAndOtherDropoffDetailsContainer}>
           <View style={styles.otherDropoffDetailsContainer}>
             <Text style={styles.otherDropOffDetails}>{item.user_name} </Text>
-            <Text style={styles.otherDropOffDetails}>
-              ({item.user_phone}),{' '}
-            </Text>
-            <Text style={styles.otherDropOffDetails}>
-              {item.user_apartment},{' '}
-            </Text>
+            <Text style={styles.otherDropOffDetails}>({item.user_phone})</Text>
+            {item.user_apartment ? (
+              <>
+                <Text>, </Text>
+                <Text style={styles.otherDropOffDetails}>
+                  {item.user_apartment},{' '}
+                </Text>
+              </>
+            ) : null}
           </View>
-          <Text style={styles.otherDropOffDetails}>{item.user_landmark}</Text>
+          {item.user_landmark ? (
+            <Text style={styles.otherDropOffDetails}>{item.user_landmark}</Text>
+          ) : null}
         </View>
         <View style={styles.iconsContainer}>
           <TouchableOpacity activeOpacity={0.7}>

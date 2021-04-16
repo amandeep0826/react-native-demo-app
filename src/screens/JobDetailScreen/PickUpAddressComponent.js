@@ -34,16 +34,25 @@ const PickUpAddressComponent = (
         {/* <View style={styles.verticalDash}></View> */}
         <Dash
           dashStyle={{width: 1, backgroundColor: dashColor}}
-          style={{flexDirection: 'column'}}
+          style={{flexDirection: 'column', height: 60}}
         />
         <View style={styles.addressAndOtherDetailsContainer}>
           <Text style={styles.address}>{pickupAddress}</Text>
           <View style={styles.otherPickupDetailsContainer}>
             <Text style={styles.otherPickupDetails}>{user_name} </Text>
-            <Text style={styles.otherPickupDetails}>({user_phone}), </Text>
-            <Text style={styles.otherPickupDetails}>{user_apartment}, </Text>
+            <Text style={styles.otherPickupDetails}>({user_phone}) </Text>
+            {user_apartment ? (
+              <>
+                <Text>,</Text>
+                <Text style={styles.otherPickupDetails}>
+                  {user_apartment},{' '}
+                </Text>
+              </>
+            ) : null}
           </View>
-          <Text style={styles.otherPickupDetails}>{user_landmark}</Text>
+          {user_landmark ? (
+            <Text style={styles.otherPickupDetails}>{user_landmark}</Text>
+          ) : null}
         </View>
         <View style={styles.iconsContainer}>
           <TouchableOpacity activeOpacity={0.7}>

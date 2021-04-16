@@ -1,8 +1,6 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import {useNetInfo} from '@react-native-community/netinfo';
-import Spinner from 'react-native-loading-spinner-overlay';
-import SplashScreen from 'react-native-splash-screen';
-import React, {useContext, useEffect, useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {
   ActivityIndicator,
   Image,
@@ -15,6 +13,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import Spinner from 'react-native-loading-spinner-overlay';
 import validator from 'validator';
 import api, {DriverLogin} from '../../api/api';
 import {
@@ -29,16 +28,12 @@ import {styles} from './style';
 const DriverLoginScreen = ({navigation}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
-  // const [loading, setLoading] = useState(false);
   const [visibility, setVisibility] = useState(false);
   const [spinner, setSpinner] = useState(false);
   const netInfo = useNetInfo();
   const [token, setToken] = useContext(AuthContext);
   const [user, setUser] = useContext(UserContext);
 
-  // useEffect(() => {
-  //   checkNetwork();
-  // }, []);
   const checkNetwork = () => {
     if (netInfo.isConnected == false) {
       ToastAndroid.show('No Internet detected.', ToastAndroid.SHORT);
@@ -112,8 +107,6 @@ const DriverLoginScreen = ({navigation}) => {
         setToken(token);
         await storeUserData(user);
         setUser(user);
-        // setUser(response.data.user);
-        // return token;
       })
       .catch(error => {
         if (username.trim() && password.trim()) {
@@ -268,22 +261,8 @@ const DriverLoginScreen = ({navigation}) => {
               setSpinner(true);
             } else {
             }
-
-            // setPointerEvent('none');
-            // navigation.navigate('TabNavigation');
           }}>
-          {/* {loading &&
-              username.trim() &&
-              password.trim() &&
-              validator.isEmail(username) ? (
-                <ActivityIndicator
-                  size="large"
-                  color={primarybackgroundColor}
-                  style={{paddingBottom: 6}}
-                />
-              ) : ( */}
           <Text style={styles.signInButtonText}>SIGN IN</Text>
-          {/* )} */}
         </TouchableOpacity>
         <TouchableOpacity
           activeOpacity={0.7}
@@ -293,7 +272,6 @@ const DriverLoginScreen = ({navigation}) => {
           }}>
           <Text style={styles.driverButtonText}>BECOME A DRIVER</Text>
         </TouchableOpacity>
-        {/* {loaderScreen()} */}
       </SafeAreaView>
     </KeyboardAvoidingView>
   );

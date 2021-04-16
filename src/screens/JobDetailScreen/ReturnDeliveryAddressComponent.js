@@ -60,7 +60,12 @@ const ReturnDeliveryAddressComponent = (
             <View style={styles.otherPickupDetailsContainer}>
               <Text style={styles.otherPickupDetails}>{user_name} </Text>
               <Text style={styles.otherPickupDetails}>({user_phone}), </Text>
-              <Text style={styles.otherPickupDetails}>{user_apartment}, </Text>
+
+              {user_apartment !== null ? (
+                <Text style={styles.otherPickupDetails}>
+                  {user_apartment},{' '}
+                </Text>
+              ) : null}
             </View>
             <Text style={styles.otherPickupDetails}>{user_landmark}</Text>
           </View>

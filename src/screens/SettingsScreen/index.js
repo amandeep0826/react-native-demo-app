@@ -11,7 +11,12 @@ import {
   View,
 } from 'react-native';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import api, {ContactUs, getHeaders, removeToken} from '../../api/api';
+import api, {
+  ContactUs,
+  DriverProfile,
+  getHeaders,
+  removeToken,
+} from '../../api/api';
 import {secondarybackgroundColor} from '../../assets/colors';
 import {NunitoFont} from '../../assets/fonts/nunitoFont';
 import {AuthContext, UserContext} from '../../routes/RootStackNavigation';
@@ -28,18 +33,32 @@ const SettingsScreen = ({navigation, driveData}) => {
     const fetchHeader = async () => {
       const _headers = await getHeaders();
       setHeaders(_headers);
+      getDriverProfileHandler(_headers);
     };
     fetchHeader();
-    profileImageHandler();
-  }, []);
+  }, [driverProfile]);
+  // profileImageHandler();
 
-  const profileImageHandler = () => {
-    setProfileImage(user.user.profile_image);
-    // console.log(profileImage);
+  const getDriverProfileHandler = _headers => {
+    api
+      .get(DriverProfile, {
+        headers: _headers,
+      })
+      .then(response => {
+        setDriverProfile(response.data);
+      })
+      .catch(error => {
+        console.log({error});
+      });
   };
 
-  let image = user.user.profile_image;
-  // console.log(image);
+  // const profileImageHandler = () => {
+  //   setProfileImage(user.user.profile_image);
+  //   // console.log(profileImage);
+  // };
+
+  // let image = user.user.profile_image;
+  // // console.log(image);
 
   const logOut = async () => {
     try {
@@ -63,25 +82,6 @@ const SettingsScreen = ({navigation, driveData}) => {
       console.log({error});
     }
   };
-
-  function contactUsHandler() {
-    api
-      .post(
-        ContactUs,
-        {
-          message: 'string',
-        },
-        {
-          headers: headers,
-        },
-      )
-      .then(response => {
-        ToastAndroid.show('Your message has been posted', ToastAndroid.SHORT);
-      })
-      .catch(error => {
-        console.log({error});
-      });
-  }
 
   return (
     <SafeAreaView style={backgroundColor.container}>
@@ -110,6 +110,7 @@ const SettingsScreen = ({navigation, driveData}) => {
         />
         <View style={styles.editNameContainer}>
           <Text style={styles.name}>{user.user.name}</Text>
+          {/* <Text style={styles.name}>{driverProfile.name}</Text> */}
           <MaterialCommunityIcons
             style={styles.pencilIcon}
             name="pencil-plus"
@@ -121,11 +122,12 @@ const SettingsScreen = ({navigation, driveData}) => {
           />
         </View>
         <Text style={styles.phone}>{user.user.phone}</Text>
+        {/* <Text style={styles.phone}>{driverProfile.phone}</Text> */}
       </View>
       <TouchableOpacity
         style={styles.contactUsContainer}
         onPress={() => {
-          contactUsHandler();
+          navigation.navigate('ContactUsScreen');
         }}>
         <View style={{flexDirection: 'row', marginVertical: 24}}>
           <MaterialCommunityIcons

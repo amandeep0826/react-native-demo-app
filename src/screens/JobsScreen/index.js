@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react';
 import {
   ActivityIndicator,
-  Button,
   FlatList,
   Image,
   RefreshControl,
@@ -9,11 +8,10 @@ import {
   StatusBar,
   StyleSheet,
   Text,
-  TouchableOpacity,
   View,
 } from 'react-native';
-import ModalDropdown from 'react-native-modal-dropdown';
 import Spinner from 'react-native-loading-spinner-overlay';
+import ModalDropdown from 'react-native-modal-dropdown';
 import api, {
   AcceptDelivery,
   acceptDeliveryHandler,
@@ -38,6 +36,7 @@ const JobScreen = ({navigation, ...props}) => {
   const [spinner, setSpinner] = useState(false);
   const [itemId, setItemId] = useState('');
   const [sorting, setSorting] = useState(1);
+  const [dropDownSort, setDropDownSort] = useState(0);
 
   const dropDownOptions = ['Recent Posted', 'Time', 'Payment', 'Distance'];
 
@@ -82,6 +81,29 @@ const JobScreen = ({navigation, ...props}) => {
       const newData = response.data.deliveries;
       setDeliveriesJobs(newData);
     });
+  };
+
+  const acceptDeliveryHandler = item => {
+    api
+      .put(
+        AcceptDelivery,
+        {
+          delivery_id: item.id,
+          job_type: item.job_type,
+          pickup_time: item.pickup_time,
+          estimated_time: item.estimated_delivery_time,
+        },
+        {
+          headers: headers,
+        },
+      )
+      .then(response => {
+        removeJob(item.id);
+        console.log({response});
+      })
+      .catch(error => {
+        console.log({error});
+      });
   };
 
   const getDeliveriesFromAPI = (_headers, _sorting, _offset) => {
@@ -154,30 +176,28 @@ const JobScreen = ({navigation, ...props}) => {
           <View style={{flexDirection: 'row', alignItems: 'center'}}>
             <ModalDropdown
               options={dropDownOptions}
-              // children={
-              //   <Image
-              //     style={{
-              //       width: 25,
-              //       height: 25,
-              //       marginLeft: 'auto',
-              //       marginVertical: 6,
-              //       marginRight: 16,
-              //     }}
-              //     source={require('../../assets/drop_down.png')}
-              //   />
-              // }
-              // renderRightComponent={
-              //   <Image
-              //     style={{
-              //       width: 25,
-              //       height: 25,
-              //       marginLeft: 'auto',
-              //       marginVertical: 6,
-              //       marginRight: 16,
-              //     }}
-              //     source={require('../../assets/drop_down.png')}
-              //   />
-              // }
+              children={
+                <View style={styles.dropDownChildrenStyle}>
+                  {dropDownSort == 0 ? (
+                    <Text>Recent Posted</Text>
+                  ) : dropDownSort == 1 ? (
+                    <Text>Time</Text>
+                  ) : dropDownSort == 2 ? (
+                    <Text>Payment</Text>
+                  ) : (
+                    <Text>Distance</Text>
+                  )}
+                  <Image
+                    style={{
+                      width: 25,
+                      height: 25,
+                      marginLeft: 'auto',
+                      marginRight: 16,
+                    }}
+                    source={require('../../assets/drop_down.png')}
+                  />
+                </View>
+              }
               defaultValue="Recent Posted"
               style={styles.modalStyle}
               dropdownStyle={styles.dropdownStyle}
@@ -186,17 +206,9 @@ const JobScreen = ({navigation, ...props}) => {
               onSelect={data => {
                 setLoading(true);
                 changeSorting(data + 1);
+                setDropDownSort(data);
               }}
             />
-            {/* <TouchableOpacity style={{marginLeft: 'auto'}}>
-              <Image
-                style={{
-                  width: 20,
-                  height: 20,
-                }}
-                source={require('../../assets/drop_down.png')}
-              />
-            </TouchableOpacity> */}
           </View>
         </View>
         {loading && deliveriesJobs.length == 0 ? (
@@ -234,11 +246,7 @@ const JobScreen = ({navigation, ...props}) => {
                 <JobsCard
                   setSpinner={() => setSpinner(true)}
                   spinnerControl={() => spinnerControl()}
-                  onAccept={() =>
-                    acceptDeliveryHandler(item).then(response => {
-                      removeJob(item.id);
-                    })
-                  }
+                  onAccept={() => acceptDeliveryHandler(item)}
                   onPress={() => {
                     navigation.navigate('JobsDetailScreen', {item});
                   }}
@@ -314,6 +322,11 @@ const styles = StyleSheet.create({
     backgroundColor: '#FFD439',
     height: 60,
     elevation: 3,
+  },
+  dropDownChildrenStyle: {
+    flexDirection: 'row',
+    marginVertical: 8,
+    marginLeft: 16,
   },
 });
 

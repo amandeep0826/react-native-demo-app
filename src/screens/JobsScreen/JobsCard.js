@@ -25,6 +25,16 @@ export default function JobsCard({
   setSpinner,
   spinnerControl,
 }) {
+  // const date = item.pickupDetails[0].pickup_date;
+  // const dateArray = date.split(/(\s+)/);
+  // // console.log(date);
+
+  // // console.log(dateArray); // ["my", " ", "car", " ", "is", " ", "red"]
+  // pickUpDate = dateArray[0];
+  // pickUpTime = dateArray[2];
+  // console.log(dateArray[0]);
+  // console.log(dateArray[2]);
+
   return (
     <TouchableOpacity
       style={styles.cardView}
@@ -77,13 +87,13 @@ export default function JobsCard({
         <View style={styles.pickUpDateContainer}>
           <Text style={styles.pickUpDateText}>PICKUP DATE</Text>
           <Text style={styles.pickUpDate}>
-            {item.pickupDetails[0].pickup_date}
+            {item.pickup_date.split(' ')[0]}
           </Text>
         </View>
         <View style={styles.pickUpTimeContainer}>
           <Text style={styles.pickUpTimeText}>PICKUP TIME</Text>
           <Text style={styles.pickUpTime}>
-            {item.pickupDetails[0].pickup_time}
+            {item.pickup_time.split(' ')[1]}
           </Text>
         </View>
       </View>

@@ -8,6 +8,7 @@ import {
   secondarybackgroundColor,
 } from '../assets/colors';
 import {NunitoFont} from '../assets/fonts/nunitoFont';
+import ContactUsScreen from '../screens/ContactUsScreen';
 import DriverLoginScreen from '../screens/DriverLoginScreen/index';
 import DriverSignupScreen from '../screens/DriverSignupScreen/index';
 import DummyScreen from '../screens/dummyScreen';
@@ -123,6 +124,23 @@ const RootStackNavigation = ({navigation}) => {
                 options={{
                   headerShown: true,
                   headerTitle: 'Job Details',
+                  headerTitleAlign: 'center',
+                  headerTitleStyle: {
+                    fontFamily: NunitoFont,
+                    fontSize: 16,
+                    fontWeight: 'bold',
+                  },
+                  headerStyle: {
+                    backgroundColor: secondarybackgroundColor,
+                  },
+                }}
+              />
+              <Stack.Screen
+                name="ContactUsScreen"
+                component={ContactUsScreen}
+                options={{
+                  headerShown: true,
+                  headerTitle: 'Contact Us',
                   headerTitleAlign: 'center',
                   headerTitleStyle: {
                     fontFamily: NunitoFont,

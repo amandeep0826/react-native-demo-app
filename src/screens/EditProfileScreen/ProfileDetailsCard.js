@@ -6,28 +6,36 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import {getHeaders} from '../../api/api';
 import {
   iconColor,
   primarycolor,
   tertiarybackgroundColor,
 } from '../../assets/colors';
-import {styles} from './styles';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import {NunitoFont} from '../../assets/fonts/nunitoFont';
-import {UpdateDriverProfile, getHeaders} from '../../api/api';
-import api from '../../api/api';
+import {styles} from './styles';
 
-const NameCard = ({iconName, value, title, onSave}) => {
+const NameCard = ({
+  iconName,
+  value,
+  title,
+  onSave,
+  setSpinner,
+  spinnerControl,
+  updateProfilePage,
+}) => {
   const [isEdit, setIsEdit] = useState(false);
-  const [headers, setHeaders] = useState(null);
-  // const [name, setName] = useState('');
-  // const [email, setEmail] = useState('');
-  // const [phone, setPhone] = useState('');
   const [text, setText] = useState('');
+  const [headers, setHeaders] = useState(null);
 
-  // const printVal = () => {
-  //   console.log(email);
-  // };
+  useEffect(() => {
+    const fetchHeader = async () => {
+      const _headers = await getHeaders();
+      setHeaders(_headers);
+    };
+    fetchHeader();
+  }, []);
 
   return (
     <ScrollView>
@@ -48,12 +56,17 @@ const NameCard = ({iconName, value, title, onSave}) => {
           </View>
           {isEdit ? (
             <TextInput
-              style={{borderBottomWidth: 1, width: 272, alignSelf: 'center'}}
-              // onChangeText={name => {
-              //   nameHandler(name);
-              // }}
+              autoFocus={true}
+              style={{
+                borderBottomWidth: 1,
+                alignSelf: 'stretch',
+                marginLeft: 43,
+                marginRight: 20,
+              }}
+              // placeholder={value}
+              defaultValue={value}
               onChangeText={setText}
-              value={text}
+              // value={text}
             />
           ) : (
             <Text style={styles.usernameText}>{value}</Text>
@@ -67,13 +80,16 @@ const NameCard = ({iconName, value, title, onSave}) => {
               width: 81,
               height: 31,
               borderRadius: 5,
-              marginLeft: 234,
               marginVertical: 18,
+              marginLeft: 'auto',
+              marginRight: 20,
             }}
             onPress={() => {
               onSave(text);
               setIsEdit(false);
-              // printVal();
+              setSpinner(true);
+              updateProfilePage(headers);
+              spinnerControl();
             }}>
             <Text
               style={{

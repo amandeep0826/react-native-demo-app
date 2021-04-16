@@ -346,6 +346,10 @@ export const styles = StyleSheet.create({
   addressAndOtherDetailsContainer: {
     marginLeft: 18.5,
   },
+  addressAndOtherDropOffDetailsContainer: {
+    marginLeft: 18.5,
+    marginBottom: 18.5,
+  },
   pickupNumberContainer: {
     // marginTop: 17,
     marginLeft: 20,

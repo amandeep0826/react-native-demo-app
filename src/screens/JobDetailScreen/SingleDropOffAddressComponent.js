@@ -30,14 +30,23 @@ const SingleDropOffAddressComponent = (
         <Text style={styles.pickupPointText}>DROP OFF POINT</Text>
       </View>
       <View style={styles.pickUpAddressContainer}>
-        <View style={styles.addressAndOtherDetailsContainer}>
+        <View style={styles.addressAndOtherDropOffDetailsContainer}>
           <Text style={styles.address}>{pickupAddress}</Text>
           <View style={styles.otherPickupDetailsContainer}>
             <Text style={styles.otherPickupDetails}>{user_name} </Text>
-            <Text style={styles.otherPickupDetails}>({user_phone}), </Text>
-            <Text style={styles.otherPickupDetails}>{user_apartment}, </Text>
+            <Text style={styles.otherPickupDetails}>({user_phone}) </Text>
+            {user_apartment ? (
+              <>
+                <Text>,</Text>
+                <Text style={styles.otherPickupDetails}>
+                  {user_apartment},{' '}
+                </Text>
+              </>
+            ) : null}
           </View>
-          <Text style={styles.otherPickupDetails}>{user_landmark}</Text>
+          {user_landmark ? (
+            <Text style={styles.otherPickupDetails}>{user_landmark}</Text>
+          ) : null}
         </View>
         <View style={styles.iconsContainer}>
           <TouchableOpacity activeOpacity={0.7}>

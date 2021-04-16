@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {
   FlatList,
   Image,
@@ -7,9 +7,7 @@ import {
   Text,
   TouchableOpacity,
   View,
-  VirtualizedList,
 } from 'react-native';
-import ModalDropdown from 'react-native-modal-dropdown';
 import {
   cardBorderColor,
   dashColor,
@@ -23,10 +21,10 @@ import {
 } from '../../assets/colors';
 import {NunitoFont} from '../../assets/fonts/nunitoFont';
 import {backgroundColor} from '../../styles/commonStyle';
-import PickUpAddressComponent from './PickUpAddressComponent';
 import DropOffAddressComponent from './DropOffAddressComponent';
-import SingleDropOffAddressComponent from './SingleDropOffAddressComponent';
+import PickUpAddressComponent from './PickUpAddressComponent';
 import ReturnDeliveryAddressComponent from './ReturnDeliveryAddressComponent';
+import SingleDropOffAddressComponent from './SingleDropOffAddressComponent';
 
 const JobDetailScreen = (props, onAccept) => {
   const printFun = () => {
