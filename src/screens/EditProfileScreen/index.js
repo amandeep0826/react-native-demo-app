@@ -3,6 +3,7 @@ import React, {useContext, useEffect, useState} from 'react';
 import {
   ActivityIndicator,
   Alert,
+  Button,
   Image,
   ScrollView,
   Text,
@@ -12,6 +13,7 @@ import {
 } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import Spinner from 'react-native-loading-spinner-overlay';
+import Modal from 'react-native-modal';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import api, {
   DriverProfile,
@@ -38,7 +40,11 @@ const EditProfileScreen = () => {
   const [spinner, setSpinner] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [text, setText] = useState('');
-  const [modalVisible, setModalVisible] = useState(false);
+  const [isModalVisible, setModalVisible] = useState(false);
+
+  const toggleModal = () => {
+    setModalVisible(!isModalVisible);
+  };
 
   const changeProfilePhoto = () => {
     Alert.alert('Add Photo', ' ', [
@@ -234,6 +240,21 @@ const EditProfileScreen = () => {
           </View>
         }
       />
+      <Button title="Show modal" onPress={toggleModal} />
+
+      <Modal isVisible={isModalVisible}>
+        <View style={{flex: 1}}>
+          <View style={{flexDirection: 'row'}}>
+            <Text>Change Password</Text>
+            <TouchableOpacity
+              onPress={() => {
+                toggleModal();
+              }}>
+              <Image source={require('../../assets/cancel.png')} />
+            </TouchableOpacity>
+          </View>
+        </View>
+      </Modal>
       <View style={styles.bodyContainer}>
         <View style={styles.imageContainer}>
           <Image
@@ -350,7 +371,6 @@ const EditProfileScreen = () => {
                     setIsEdit(false);
                     setSpinner(true);
                     spinnerControl();
-                    // setModalVisible(!modalVisible);
                   }}>
                   <Text
                     style={{
@@ -375,7 +395,7 @@ const EditProfileScreen = () => {
                   style={styles.editPasswordButton}
                   onPress={() => {
                     setIsEdit(true);
-                    // setModalVisible(true);
+                    toggleModal();
                   }}>
                   <MaterialCommunityIcons
                     style={styles.pencil}
