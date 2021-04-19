@@ -7,22 +7,28 @@ import {
   Image,
   ScrollView,
   Text,
-  TextInput,
+  ToastAndroid,
   TouchableOpacity,
   View,
 } from 'react-native';
 import ImagePicker from 'react-native-image-crop-picker';
 import Spinner from 'react-native-loading-spinner-overlay';
 import Modal from 'react-native-modal';
+import {TextInput} from 'react-native-paper';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 import api, {
+  ChangePassword,
   DriverProfile,
   getHeaders,
   UpdateDriverProfile,
 } from '../../api/api';
 import {
   iconColor,
+  primarybackgroundColor,
   primarycolor,
+  pureBlack,
+  pureWhite,
+  secondarybackgroundColor,
   tertiarybackgroundColor,
 } from '../../assets/colors';
 import {NunitoFont} from '../../assets/fonts/nunitoFont';
@@ -31,7 +37,7 @@ import {backgroundColor} from '../../styles/commonStyle';
 import NameCard from './ProfileDetailsCard';
 import {styles} from './styles';
 
-const EditProfileScreen = () => {
+const EditProfileScreen = ({navigation}) => {
   const [driverProfile, setDriverProfile] = useState('');
   const [headers, setHeaders] = useState(null);
   const [user, setUser] = useContext(UserContext);
@@ -40,7 +46,10 @@ const EditProfileScreen = () => {
   const [spinner, setSpinner] = useState(false);
   const [isEdit, setIsEdit] = useState(false);
   const [text, setText] = useState('');
+  const [visibility, setVisibility] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
+  const [currentPassword, setCurrentPassword] = useState('');
+  const [newPassword, setNewPassword] = useState('');
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -62,6 +71,10 @@ const EditProfileScreen = () => {
         style: 'cancel',
       },
     ]);
+  };
+
+  const printVal = () => {
+    console.log(currentPassword, newPassword);
   };
 
   const chooseFromPhone = () => {
@@ -88,23 +101,23 @@ const EditProfileScreen = () => {
     const fetchHeader = async () => {
       const _headers = await getHeaders();
       setHeaders(_headers);
-      getDriverProfileHandler(_headers);
+      // getDriverProfileHandler(_headers);
     };
     if (driverProfile === '') fetchHeader();
   }, []);
 
-  const getDriverProfileHandler = _headers => {
-    api
-      .get(DriverProfile, {
-        headers: _headers,
-      })
-      .then(response => {
-        setDriverProfile(response.data);
-      })
-      .catch(error => {
-        console.log({error});
-      });
-  };
+  // const getDriverProfileHandler = _headers => {
+  //   api
+  //     .get(DriverProfile, {
+  //       headers: _headers,
+  //     })
+  //     .then(response => {
+  //       setDriverProfile(response.data);
+  //     })
+  //     .catch(error => {
+  //       console.log({error});
+  //     });
+  // };
   const UpdateName = name => {
     let updateValue = {
       name: name,
@@ -114,9 +127,6 @@ const EditProfileScreen = () => {
         headers: headers,
       })
       .then(response => {
-        // console.log({response});
-        // const updatedName = name;
-        // AsyncStorage.setItem('user.name', updatedName);
         console.log('Profile has been updated');
         // console.log({name});
         AsyncStorage.getItem('user')
@@ -155,23 +165,12 @@ const EditProfileScreen = () => {
         headers: headers,
       })
       .then(response => {
-        // console.log({response});
         console.log('Profile has been updated');
         AsyncStorage.getItem('user')
           .then(user => {
-            // the string value read from AsyncStorage has been assigned to data
-            // console.log(user);
-
-            // transform it back to an object
             user = JSON.parse(user);
-            // console.log(user);
-
-            // Decrement
             user.user.email = email;
-            // console.log(user);
             setUser(user);
-
-            //save the value to AsyncStorage again
             AsyncStorage.setItem('user', JSON.stringify(user));
           })
           .done();
@@ -189,23 +188,12 @@ const EditProfileScreen = () => {
         headers: headers,
       })
       .then(response => {
-        // console.log({response});
         console.log('Profile has been updated');
         AsyncStorage.getItem('user')
           .then(user => {
-            // the string value read from AsyncStorage has been assigned to data
-            // console.log(user);
-
-            // transform it back to an object
             user = JSON.parse(user);
-            // console.log(user);
-
-            // Decrement
             user.user.phone = phone;
-            // console.log(user);
             setUser(user);
-
-            //save the value to AsyncStorage again
             AsyncStorage.setItem('user', JSON.stringify(user));
           })
           .done();
@@ -214,10 +202,42 @@ const EditProfileScreen = () => {
         console.log({error});
       });
   };
+
+  const UpdatePassword = () => {
+    let updateValue = {
+      old_password: currentPassword,
+      new_password: newPassword,
+    };
+    api
+      .put(ChangePassword, updateValue, {
+        headers: headers,
+      })
+      .then(response => {
+        // console.log('Your password has been changed successfully.');
+        ToastAndroid.show(
+          'Your password has been changed successfully.',
+          ToastAndroid.SHORT,
+        );
+        toggleModal();
+      })
+      .catch(error => {
+        console.log({error});
+        ToastAndroid.show('Incorrect password', ToastAndroid.SHORT);
+      });
+  };
+
   const spinnerControl = () => {
     setTimeout(() => {
       setSpinner(false);
     }, 1000);
+  };
+
+  const visibilityControl = () => {
+    if (visibility == true) {
+      return false;
+    } else {
+      return true;
+    }
   };
 
   return (
@@ -236,21 +256,165 @@ const EditProfileScreen = () => {
               alignItems: 'center',
               justifyContent: 'center',
             }}>
-            <ActivityIndicator size="large" color={primarycolor} style={{}} />
+            <ActivityIndicator size="large" color={primarycolor} />
           </View>
         }
       />
-      <Button title="Show modal" onPress={toggleModal} />
-
-      <Modal isVisible={isModalVisible}>
-        <View style={{flex: 1}}>
-          <View style={{flexDirection: 'row'}}>
-            <Text>Change Password</Text>
-            <TouchableOpacity
-              onPress={() => {
-                toggleModal();
+      <Modal isVisible={isModalVisible} onBackdropPress={() => toggleModal()}>
+        <View style={{borderRadius: 10, overflow: 'hidden'}}>
+          <View style={{backgroundColor: secondarybackgroundColor, height: 60}}>
+            <View
+              style={{
+                flexDirection: 'row',
+                backgroundColor: secondarybackgroundColor,
+                justifyContent: 'center',
+                // alignSelf: 'center',
+                marginTop: 20,
               }}>
-              <Image source={require('../../assets/cancel.png')} />
+              <Text
+                style={{
+                  fontSize: 18,
+                  fontFamily: NunitoFont,
+                }}>
+                Change Password
+              </Text>
+              <TouchableOpacity
+                onPress={() => {
+                  toggleModal();
+                }}>
+                <Image
+                  source={require('../../assets/cancel.png')}
+                  style={{width: 30, height: 30}}
+                />
+              </TouchableOpacity>
+            </View>
+          </View>
+          <View
+            style={{
+              backgroundColor: primarybackgroundColor,
+              paddingVertical: 20,
+              paddingHorizontal: 12,
+            }}>
+            <TextInput
+              placeholder="Current Password"
+              secureTextEntry={visibilityControl()}
+              onChangeText={value => {
+                setCurrentPassword(value);
+              }}
+              left={
+                <TextInput.Icon
+                  name={() => (
+                    <MaterialCommunityIcons name={'lock'} size={20} />
+                  )}
+                />
+              }
+              right={
+                visibility ? (
+                  <TextInput.Icon
+                    name={() => (
+                      <MaterialCommunityIcons
+                        onPress={() => {
+                          console.log('eye pressed');
+                          setVisibility(false);
+                        }}
+                        name={'eye'}
+                        size={20}
+                      />
+                    )}
+                  />
+                ) : (
+                  <TextInput.Icon
+                    name={() => (
+                      <MaterialCommunityIcons
+                        onPress={() => {
+                          setVisibility(true);
+                        }}
+                        name={'eye-off'}
+                        size={20}
+                      />
+                    )}
+                  />
+                )
+              }
+              style={{
+                backgroundColor: pureWhite,
+                height: 42,
+                borderRadius: 5,
+                marginBottom: 20,
+                borderBottomColor: pureWhite,
+              }}
+            />
+            <TextInput
+              placeholder="New Password"
+              secureTextEntry={visibilityControl()}
+              onChangeText={value => {
+                setNewPassword(value);
+              }}
+              left={
+                <TextInput.Icon
+                  name={() => (
+                    <MaterialCommunityIcons name={'lock'} size={20} />
+                  )}
+                />
+              }
+              right={
+                visibility ? (
+                  <TextInput.Icon
+                    name={() => (
+                      <MaterialCommunityIcons
+                        onPress={() => {
+                          setVisibility(false);
+                        }}
+                        name={'eye'}
+                        size={20}
+                      />
+                    )}
+                  />
+                ) : (
+                  <TextInput.Icon
+                    name={() => (
+                      <MaterialCommunityIcons
+                        onPress={() => {
+                          setVisibility(true);
+                        }}
+                        name={'eye-off'}
+                        size={20}
+                      />
+                    )}
+                  />
+                )
+              }
+              style={{
+                backgroundColor: pureWhite,
+                height: 42,
+                borderRadius: 5,
+                marginBottom: 20,
+              }}
+            />
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={() => {
+                // UpdatePassword();
+                if (currentPassword.trim() && newPassword.trim()) {
+                  if (currentPassword.trim() == newPassword.trim()) {
+                    ToastAndroid.show(
+                      'Passwords dont match',
+                      ToastAndroid.SHORT,
+                    );
+                  } else {
+                    setSpinner(true);
+                    UpdatePassword();
+                    spinnerControl();
+                  }
+                } else {
+                  ToastAndroid.show(
+                    'Please enter both passwords',
+                    ToastAndroid.SHORT,
+                  );
+                }
+              }}
+              style={styles.changePasswordButtonContainer}>
+              <Text style={styles.changePasswordButtonText}>SUBMIT</Text>
             </TouchableOpacity>
           </View>
         </View>
@@ -289,9 +453,9 @@ const EditProfileScreen = () => {
             }}
             setSpinner={() => setSpinner(true)}
             spinnerControl={() => spinnerControl()}
-            updateProfilePage={_headers => {
-              getDriverProfileHandler(_headers);
-            }}
+            // updateProfilePage={_headers => {
+            //   getDriverProfileHandler(_headers);
+            // }}
             iconName="account"
             title="Name"
             // value={user.user.name}
@@ -303,9 +467,9 @@ const EditProfileScreen = () => {
             }}
             setSpinner={() => setSpinner(true)}
             spinnerControl={() => spinnerControl()}
-            updateProfilePage={_headers => {
-              getDriverProfileHandler(_headers);
-            }}
+            // updateProfilePage={_headers => {
+            //   getDriverProfileHandler(_headers);
+            // }}
             iconName="email"
             title="Email"
             // value={user.user.email}
@@ -313,101 +477,47 @@ const EditProfileScreen = () => {
           />
           <NameCard
             onSave={phone => {
-              UpdateNumber(phone);
+              // UpdateNumber(phone);
+              navigation.navigate('OTPScreen', {phone});
             }}
-            setSpinner={() => setSpinner(true)}
-            spinnerControl={() => spinnerControl()}
-            updateProfilePage={_headers => {
-              getDriverProfileHandler(_headers);
-            }}
+            setSpinner={() => {}}
+            spinnerControl={() => {}}
+            // updateProfilePage={_headers => {
+            //   getDriverProfileHandler(_headers);
+            // }}
             iconName="phone"
             title="Phone Number"
             // value={user.user.phone}
             value={user.user.phone}
           />
-          <View
-            style={[styles.editPasswordContainer, {flexDirection: 'column'}]}>
-            <View style={{flexDirection: 'row'}}>
-              <View>
-                <View style={styles.nameAndIconContainer}>
-                  <MaterialCommunityIcons
-                    style={styles.userIcon}
-                    name="lock"
-                    size={24}
-                    color={iconColor}
-                  />
-                  <Text style={styles.nameText}>Password</Text>
-                </View>
-                {isEdit ? (
-                  <TextInput
-                    style={{
-                      borderBottomWidth: 1,
-                      alignSelf: 'stretch',
-                      // width: 220,
-                      marginLeft: 43,
-                      marginRight: 20,
-                    }}
-                    // placeholder={value}
-                    onChangeText={setText}
-                    // value={text}
-                  />
-                ) : (
-                  <Text style={styles.usernameText}>******</Text>
-                )}
+          <View style={[styles.editPasswordContainer, {flexDirection: 'row'}]}>
+            <View>
+              <View style={styles.nameAndIconContainer}>
+                <MaterialCommunityIcons
+                  style={styles.userIcon}
+                  name="lock"
+                  size={24}
+                  color={iconColor}
+                />
+                <Text style={styles.nameText}>Password</Text>
               </View>
-              {isEdit ? (
-                <TouchableOpacity
-                  style={{
-                    flexDirection: 'row',
-                    backgroundColor: primarycolor,
-                    width: 81,
-                    height: 31,
-                    borderRadius: 5,
-                    marginVertical: 18,
-                    marginLeft: 'auto',
-                    marginRight: 20,
-                  }}
-                  onPress={() => {
-                    setIsEdit(false);
-                    setSpinner(true);
-                    spinnerControl();
-                  }}>
-                  <Text
-                    style={{
-                      fontWeight: 'bold',
-                      fontFamily: NunitoFont,
-                      fontSize: 14,
-                      color: '#FFFFFF',
-                      textAlignVertical: 'center',
-                      marginLeft: 12,
-                    }}>
-                    Save
-                  </Text>
-                  <MaterialCommunityIcons
-                    style={{marginLeft: 7.17, alignSelf: 'center'}}
-                    name="arrow-right"
-                    size={18}
-                    color="#FFFFFF"
-                  />
-                </TouchableOpacity>
-              ) : (
-                <TouchableOpacity
-                  style={styles.editPasswordButton}
-                  onPress={() => {
-                    setIsEdit(true);
-                    toggleModal();
-                  }}>
-                  <MaterialCommunityIcons
-                    style={styles.pencil}
-                    name="pencil"
-                    size={18}
-                    color={tertiarybackgroundColor}
-                  />
-                </TouchableOpacity>
-              )}
+              <Text style={styles.usernameText}>******</Text>
             </View>
+            <TouchableOpacity
+              style={styles.editPasswordButton}
+              onPress={() => {
+                setIsEdit(true);
+                toggleModal();
+              }}>
+              <MaterialCommunityIcons
+                style={styles.pencil}
+                name="pencil"
+                size={18}
+                color={tertiarybackgroundColor}
+              />
+            </TouchableOpacity>
           </View>
-          <NameCard iconName="lock" title="Password" value="******" />
+          {/* <NameCard iconName="lock" title="Password" value="******" /> */}
         </View>
       </View>
     </ScrollView>

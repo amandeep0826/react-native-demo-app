@@ -88,7 +88,7 @@ const NameCard = ({
               onSave(text);
               setIsEdit(false);
               setSpinner(true);
-              updateProfilePage(headers);
+              // updateProfilePage(headers);
               spinnerControl();
             }}>
             <Text

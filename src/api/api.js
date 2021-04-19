@@ -8,6 +8,7 @@ export const AcceptDelivery = 'driver/accepted';
 export const DriverProfile = 'driver';
 export const UpdateDriverProfile = 'driver';
 export const ContactUs = 'driver/contact-us';
+export const ChangePassword = 'change/password';
 export const DeliveriesByTime = 'driver/deliveries?status=1&sorting=2&page=1';
 export const getToken = async () => {
   return await AsyncStorage.getItem('token');
@@ -27,28 +28,6 @@ export const removeItemValue = async key => {
     return false;
   }
 };
-
-// export const acceptDeliveryHandler = item => {
-//   return api
-//     .put(
-//       AcceptDelivery,
-//       {
-//         delivery_id: item.id,
-//         job_type: item.job_type,
-//         pickup_time: item.pickup_time,
-//         estimated_time: item.estimated_delivery_time,
-//       },
-//       {
-//         headers: headers,
-//       },
-//     )
-//     .then(response => {
-//       return response;
-//     })
-//     .catch(error => {
-//       console.log({error});
-//     });
-// };
 
 export const removeToken = async () => {
   return await removeItemValue('token');

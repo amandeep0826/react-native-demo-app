@@ -13,6 +13,7 @@ import DriverLoginScreen from '../screens/DriverLoginScreen/index';
 import DriverSignupScreen from '../screens/DriverSignupScreen/index';
 import DummyScreen from '../screens/dummyScreen';
 import EditProfileScreen from '../screens/EditProfileScreen';
+import OTPScreen from '../screens/EditProfileScreen/otpScreen';
 import ForgotPassword from '../screens/ForgotPasswordScreen/index';
 import JobDetailScreen from '../screens/JobDetailScreen';
 import SplashScreenScreen from '../screens/SplashScreen/index';
@@ -141,6 +142,23 @@ const RootStackNavigation = ({navigation}) => {
                 options={{
                   headerShown: true,
                   headerTitle: 'Contact Us',
+                  headerTitleAlign: 'center',
+                  headerTitleStyle: {
+                    fontFamily: NunitoFont,
+                    fontSize: 16,
+                    fontWeight: 'bold',
+                  },
+                  headerStyle: {
+                    backgroundColor: secondarybackgroundColor,
+                  },
+                }}
+              />
+              <Stack.Screen
+                name="OTPScreen"
+                component={OTPScreen}
+                options={{
+                  headerShown: true,
+                  headerTitle: 'Verify OTP',
                   headerTitleAlign: 'center',
                   headerTitleStyle: {
                     fontFamily: NunitoFont,

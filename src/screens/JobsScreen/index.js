@@ -160,7 +160,7 @@ const JobScreen = ({navigation, ...props}) => {
               alignItems: 'center',
               justifyContent: 'center',
             }}>
-            <ActivityIndicator size="large" color={primarycolor} style={{}} />
+            <ActivityIndicator size="large" color={primarycolor} />
           </View>
         }
       />

@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import {
   FlatList,
   Image,
@@ -8,6 +8,7 @@ import {
   TouchableOpacity,
   View,
 } from 'react-native';
+import api, {AcceptDelivery, getHeaders} from '../../api/api';
 import {
   cardBorderColor,
   dashColor,
@@ -26,10 +27,52 @@ import PickUpAddressComponent from './PickUpAddressComponent';
 import ReturnDeliveryAddressComponent from './ReturnDeliveryAddressComponent';
 import SingleDropOffAddressComponent from './SingleDropOffAddressComponent';
 
-const JobDetailScreen = (props, onAccept) => {
+const JobDetailScreen = (props, onAccept, navigation) => {
+  const [deliveriesJobs, setDeliveriesJobs] = useState([]);
+  const [headers, setHeaders] = useState(null);
+
   const printFun = () => {
     console.log(props.route.params.item.dropoffDetails);
   };
+
+  useEffect(() => {
+    const fetchHeader = async () => {
+      const _headers = await getHeaders();
+      setHeaders(_headers);
+    };
+    if (deliveriesJobs.length === 0) fetchHeader();
+  }, []);
+
+  const acceptDeliveryHandler = item => {
+    api
+      .put(
+        AcceptDelivery,
+        {
+          delivery_id: props.route.params.item.id,
+          job_type: props.route.params.item.job_type,
+          pickup_time: props.route.params.item.pickup_time,
+          estimated_time: props.route.params.item.estimated_delivery_time,
+        },
+        {
+          headers: headers,
+        },
+      )
+      .then(response => {
+        removeJob(item.id);
+        console.log({response});
+        navigation.goBack();
+      })
+      .catch(error => {
+        console.log({error});
+      });
+  };
+
+  const removeJob = id => {
+    const newJob = [...deliveriesJobs];
+    const filteredJob = newJob.filter(job => job.id !== id);
+    setDeliveriesJobs(filteredJob);
+  };
+
   return (
     <ScrollView style={backgroundColor.container}>
       <View style={styles.nameAndPriceContainer}>
@@ -196,8 +239,9 @@ const JobDetailScreen = (props, onAccept) => {
           activeOpacity={0.7}
           style={styles.acceptButtonContainer}
           onPress={() => {
-            onAccept();
-            // printFun();
+            // onAccept();
+            // // printFun();
+            acceptDeliveryHandler();
           }}>
           <Text style={styles.acceptButtonText}>ACCEPT</Text>
         </TouchableOpacity>

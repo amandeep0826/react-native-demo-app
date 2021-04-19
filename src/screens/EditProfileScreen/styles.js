@@ -96,4 +96,22 @@ export const styles = StyleSheet.create({
     marginLeft: 'auto',
     marginRight: 20,
   },
+  changePasswordButtonContainer: {
+    elevation: 3,
+    backgroundColor: primarycolor,
+    borderRadius: 5,
+    paddingVertical: 10,
+    paddingHorizontal: 12,
+    width: '95%',
+    alignSelf: 'center',
+    height: 43,
+  },
+  changePasswordButtonText: {
+    fontSize: 14,
+    color: pureWhite,
+    alignSelf: 'center',
+    textTransform: 'uppercase',
+    fontFamily: NunitoFont,
+    fontWeight: 'bold',
+  },
 });
