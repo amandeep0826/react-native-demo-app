@@ -22,7 +22,7 @@ const TabNavigation = () => {
       <Tab.Screen
         options={{
           inactiveColor: 'black',
-          tabBarLabel: 'Jobs',
+          tabBarLabel: 'JOBS',
           tabBarIcon: ({color}) => (
             <MaterialCommunityIcons name="briefcase" color={color} size={26} />
           ),
@@ -33,7 +33,7 @@ const TabNavigation = () => {
       <Tab.Screen
         options={{
           inactiveColor: 'black',
-          tabBarLabel: 'Bookings',
+          tabBarLabel: 'BOOKINGS',
           tabBarIcon: ({color}) => (
             <MaterialCommunityIcons
               name="calendar-range"
@@ -48,7 +48,7 @@ const TabNavigation = () => {
       <Tab.Screen
         options={{
           inactiveColor: 'black',
-          tabBarLabel: 'Wallet',
+          tabBarLabel: 'WALLET',
           tabBarIcon: ({color}) => (
             <MaterialCommunityIcons name="wallet" color={color} size={26} />
           ),
@@ -59,7 +59,7 @@ const TabNavigation = () => {
       <Tab.Screen
         options={{
           inactiveColor: 'black',
-          tabBarLabel: 'Settings',
+          tabBarLabel: 'SETTINGS',
           tabBarIcon: ({color}) => (
             <MaterialCommunityIcons name="cog" color={color} size={26} />
           ),

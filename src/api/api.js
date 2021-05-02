@@ -7,9 +7,14 @@ export const ForgotPasswordEnd = 'forgot/password';
 export const AcceptDelivery = 'driver/accepted';
 export const DriverProfile = 'driver';
 export const UpdateDriverProfile = 'driver';
+export const Transactions = 'driver/transaction';
 export const ContactUs = 'driver/contact-us';
 export const ChangePassword = 'change/password';
+export const DriverFeedBack = 'feedback';
+export const DeliveryManagement = 'delivery/management';
 export const DeliveriesByTime = 'driver/deliveries?status=1&sorting=2&page=1';
+export const Bookings = (status, sorting, offset) =>
+  `driver/deliveries?status=${status}&sorting=${sorting}&page=${offset}&limit=10`;
 export const getToken = async () => {
   return await AsyncStorage.getItem('token');
 };

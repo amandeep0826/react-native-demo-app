@@ -12,3 +12,4 @@ export const dashColor = '#4B4B4B';
 export const primaryGreen = '#009957';
 export const primaryDarkBlue = '#0031A3';
 export const shadowColorLight = '#B38C004D';
+export const fourthBackGroundColor = '#FFFAE3';

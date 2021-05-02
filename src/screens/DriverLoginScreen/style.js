@@ -1,4 +1,6 @@
 import {StyleSheet} from 'react-native';
+import {primarycolor} from '../../assets/colors';
+import {NunitoFont} from '../../assets/fonts/nunitoFont';
 
 export const styles = StyleSheet.create({
   mainLogo: {
@@ -35,7 +37,7 @@ export const styles = StyleSheet.create({
 
   signInButtonContainer: {
     elevation: 3,
-    backgroundColor: '#FF148E',
+    backgroundColor: primarycolor,
     borderRadius: 5,
     paddingVertical: 10,
     paddingHorizontal: 12,
@@ -50,7 +52,7 @@ export const styles = StyleSheet.create({
     color: 'white',
     alignSelf: 'center',
     textTransform: 'uppercase',
-    fontFamily: 'Nunito-Regular',
+    fontFamily: NunitoFont,
     fontWeight: 'bold',
   },
 

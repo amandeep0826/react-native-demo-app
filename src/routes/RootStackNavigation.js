@@ -2,12 +2,14 @@ import {createStackNavigator} from '@react-navigation/stack';
 import React, {useEffect, useMemo, useState} from 'react';
 import {Image} from 'react-native';
 import SplashScreen from 'react-native-splash-screen';
-import {getToken, getUserData} from '../api/api';
+import {Deliveries, getToken, getUserData} from '../api/api';
 import {
   primarybackgroundColor,
   secondarybackgroundColor,
 } from '../assets/colors';
 import {NunitoFont} from '../assets/fonts/nunitoFont';
+import BookingsDetailScreen from '../screens/BookingsDetailScreen';
+import DeliverySuccessScreen from '../screens/BookingsDetailScreen/deliverySuccessScreen';
 import ContactUsScreen from '../screens/ContactUsScreen';
 import DriverLoginScreen from '../screens/DriverLoginScreen/index';
 import DriverSignupScreen from '../screens/DriverSignupScreen/index';
@@ -17,6 +19,7 @@ import OTPScreen from '../screens/EditProfileScreen/otpScreen';
 import ForgotPassword from '../screens/ForgotPasswordScreen/index';
 import JobDetailScreen from '../screens/JobDetailScreen';
 import SplashScreenScreen from '../screens/SplashScreen/index';
+import WalletDetailScreen from '../screens/WalletScreen/WalletDetailScreen';
 import TabNavigation from './TabNavigation';
 
 export const AuthContext = React.createContext([{}, function () {}]);
@@ -137,6 +140,23 @@ const RootStackNavigation = ({navigation}) => {
                 }}
               />
               <Stack.Screen
+                name="BookingsDetailScreen"
+                component={BookingsDetailScreen}
+                options={{
+                  headerShown: true,
+                  headerTitle: 'Booking Details',
+                  headerTitleAlign: 'center',
+                  headerTitleStyle: {
+                    fontFamily: NunitoFont,
+                    fontSize: 16,
+                    fontWeight: 'bold',
+                  },
+                  headerStyle: {
+                    backgroundColor: secondarybackgroundColor,
+                  },
+                }}
+              />
+              <Stack.Screen
                 name="ContactUsScreen"
                 component={ContactUsScreen}
                 options={{
@@ -159,6 +179,40 @@ const RootStackNavigation = ({navigation}) => {
                 options={{
                   headerShown: true,
                   headerTitle: 'Verify OTP',
+                  headerTitleAlign: 'center',
+                  headerTitleStyle: {
+                    fontFamily: NunitoFont,
+                    fontSize: 16,
+                    fontWeight: 'bold',
+                  },
+                  headerStyle: {
+                    backgroundColor: secondarybackgroundColor,
+                  },
+                }}
+              />
+              <Stack.Screen
+                name="DeliverySuccessScreen"
+                component={DeliverySuccessScreen}
+                options={{
+                  headerShown: true,
+                  headerTitle: 'Delivery Successful',
+                  headerTitleAlign: 'center',
+                  headerTitleStyle: {
+                    fontFamily: NunitoFont,
+                    fontSize: 16,
+                    fontWeight: 'bold',
+                  },
+                  headerStyle: {
+                    backgroundColor: secondarybackgroundColor,
+                  },
+                }}
+              />
+              <Stack.Screen
+                name="WalletDetailScreen"
+                component={WalletDetailScreen}
+                options={{
+                  headerShown: true,
+                  headerTitle: 'Transactions',
                   headerTitleAlign: 'center',
                   headerTitleStyle: {
                     fontFamily: NunitoFont,

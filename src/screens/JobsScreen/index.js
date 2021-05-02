@@ -99,7 +99,6 @@ const JobScreen = ({navigation, ...props}) => {
       )
       .then(response => {
         removeJob(item.id);
-        console.log({response});
       })
       .catch(error => {
         console.log({error});

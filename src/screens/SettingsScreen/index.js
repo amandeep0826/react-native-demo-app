@@ -33,24 +33,24 @@ const SettingsScreen = ({navigation, driveData}) => {
     const fetchHeader = async () => {
       const _headers = await getHeaders();
       setHeaders(_headers);
-      getDriverProfileHandler(_headers);
+      // getDriverProfileHandler(_headers);
     };
     fetchHeader();
   }, [driverProfile]);
   // profileImageHandler();
 
-  const getDriverProfileHandler = _headers => {
-    api
-      .get(DriverProfile, {
-        headers: _headers,
-      })
-      .then(response => {
-        setDriverProfile(response.data);
-      })
-      .catch(error => {
-        console.log({error});
-      });
-  };
+  // const getDriverProfileHandler = _headers => {
+  //   api
+  //     .get(DriverProfile, {
+  //       headers: _headers,
+  //     })
+  //     .then(response => {
+  //       setDriverProfile(response.data);
+  //     })
+  //     .catch(error => {
+  //       console.log({error});
+  //     });
+  // };
 
   // const profileImageHandler = () => {
   //   setProfileImage(user.user.profile_image);
