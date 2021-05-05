@@ -356,6 +356,8 @@ const BookingsDetailScreen = (props, {route}) => {
             props.route.params.item.pickupDetails[0].user_apartment
           }
           user_landmark={props.route.params.item.pickupDetails[0].user_landmark}
+          lat={props.route.params.item.pickupDetails[0].lat}
+          lng={props.route.params.item.pickupDetails[0].lng}
         />
         {props.route.params.item.deliver_type_id == 1 ? (
           <SingleDropOffAddressComponent
@@ -368,6 +370,8 @@ const BookingsDetailScreen = (props, {route}) => {
             user_landmark={
               props.route.params.item.dropoffDetails[0].user_landmark
             }
+            lat={props.route.params.item.dropoffDetails[0].lat}
+            lng={props.route.params.item.dropoffDetails[0].lng}
           />
         ) : props.route.params.item.deliver_type_id == 2 ? (
           <View>
@@ -381,6 +385,8 @@ const BookingsDetailScreen = (props, {route}) => {
               user_landmark={
                 props.route.params.item.dropoffDetails[0].user_landmark
               }
+              lat={props.route.params.item.dropoffDetails[0].lat}
+              lng={props.route.params.item.dropoffDetails[0].lng}
             />
             <ReturnDeliveryAddressComponent
               pickupAddress={props.route.params.item.pickupDetails[1].address}
@@ -405,6 +411,10 @@ const BookingsDetailScreen = (props, {route}) => {
               delivery_user_landmark={
                 props.route.params.item.dropoffDetails[1].user_landmark
               }
+              lat={props.route.params.item.pickupDetails[1].lat}
+              lng={props.route.params.item.pickupDetails[1].lng}
+              lat={props.route.params.item.dropoffDetails[1].lat}
+              lng={props.route.params.item.dropoffDetails[1].lng}
             />
           </View>
         ) : (
