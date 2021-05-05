@@ -21,6 +21,8 @@ const ReturnDeliveryAddressComponent = (
     delivery_user_phone,
     delivery_user_apartment,
     delivery_user_landmark,
+    lat,
+    lng,
   },
   props,
 ) => {
@@ -80,13 +82,21 @@ const ReturnDeliveryAddressComponent = (
             <Text style={styles.otherPickupDetails}>{user_landmark}</Text>
           </View>
           <View style={styles.iconsContainer}>
-            <TouchableOpacity activeOpacity={0.7}>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={() => {
+                navigation.navigate('MapsView', {lat, lng});
+              }}>
               <Image
                 style={styles.navigationButton}
                 source={require('../../assets/navigation.png')}
               />
             </TouchableOpacity>
-            <TouchableOpacity activeOpacity={0.7}>
+            <TouchableOpacity
+              activeOpacity={0.7}
+              onPress={() => {
+                callHandler();
+              }}>
               <Image
                 style={styles.callButton}
                 source={require('../../assets/call.png')}

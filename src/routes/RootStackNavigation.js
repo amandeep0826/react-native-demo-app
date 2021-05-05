@@ -230,7 +230,7 @@ const RootStackNavigation = ({navigation}) => {
                 component={MapsView}
                 options={{
                   headerShown: true,
-                  headerTitle: 'Transactions',
+                  headerTitle: 'Location',
                   headerTitleAlign: 'center',
                   headerTitleStyle: {
                     fontFamily: NunitoFont,

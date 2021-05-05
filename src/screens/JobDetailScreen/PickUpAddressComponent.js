@@ -3,11 +3,22 @@ import {Image, Text, TouchableOpacity, View, Linking} from 'react-native';
 import {dashColor, primaryGreen, pureWhite} from '../../assets/colors';
 import {styles} from './style';
 import Dash from 'react-native-dash';
+import {useNavigation} from '@react-navigation/native';
 
 const PickUpAddressComponent = (
-  {pickupAddress, user_name, user_phone, user_apartment, user_landmark},
+  {
+    pickupAddress,
+    user_name,
+    user_phone,
+    user_apartment,
+    user_landmark,
+    lat,
+    lng,
+  },
   props,
 ) => {
+  const navigation = useNavigation();
+
   const callHandler = () => {
     let phoneNumber = '';
 
@@ -66,7 +77,11 @@ const PickUpAddressComponent = (
           ) : null}
         </View>
         <View style={styles.iconsContainer}>
-          <TouchableOpacity activeOpacity={0.7}>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => {
+              navigation.navigate('MapsView', {lat, lng});
+            }}>
             <Image
               style={styles.navigationButton}
               source={require('../../assets/navigation.png')}

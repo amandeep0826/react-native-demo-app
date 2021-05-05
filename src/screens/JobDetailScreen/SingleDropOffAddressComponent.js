@@ -13,7 +13,15 @@ import MapView from 'react-native-maps';
 import {useNavigation} from '@react-navigation/native';
 
 const SingleDropOffAddressComponent = (
-  {pickupAddress, user_name, user_phone, user_apartment, user_landmark},
+  {
+    pickupAddress,
+    user_name,
+    user_phone,
+    user_apartment,
+    user_landmark,
+    lat,
+    lng,
+  },
   props,
 ) => {
   const [isMap, setIsMaps] = useState(false);
@@ -71,7 +79,11 @@ const SingleDropOffAddressComponent = (
           ) : null}
         </View>
         <View style={styles.iconsContainer}>
-          <TouchableOpacity activeOpacity={0.7}>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => {
+              navigation.navigate('MapsView', {lat, lng});
+            }}>
             <Image
               style={styles.navigationButton}
               source={require('../../assets/navigation.png')}

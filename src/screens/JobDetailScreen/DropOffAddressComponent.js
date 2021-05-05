@@ -15,11 +15,16 @@ import {
 } from '../../assets/colors';
 import {styles} from './style';
 import Dash from 'react-native-dash';
+import {useNavigation} from '@react-navigation/native';
 
 const DropOffAddressComponent = ({item, index, showDash}) => {
   const printDetails = () => {
     console.log({item});
   };
+  const lat = item.lat;
+  const lng = item.lng;
+
+  const navigation = useNavigation();
 
   const callHandler = () => {
     let phoneNumber = '';
@@ -78,7 +83,11 @@ const DropOffAddressComponent = ({item, index, showDash}) => {
           ) : null}
         </View>
         <View style={styles.iconsContainer}>
-          <TouchableOpacity activeOpacity={0.7}>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => {
+              navigation.navigate('MapsView', {lat, lng});
+            }}>
             <Image
               style={styles.navigationButton}
               source={require('../../assets/navigation.png')}
