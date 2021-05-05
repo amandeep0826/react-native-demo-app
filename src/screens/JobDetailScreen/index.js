@@ -26,10 +26,12 @@ import DropOffAddressComponent from './DropOffAddressComponent';
 import PickUpAddressComponent from './PickUpAddressComponent';
 import ReturnDeliveryAddressComponent from './ReturnDeliveryAddressComponent';
 import SingleDropOffAddressComponent from './SingleDropOffAddressComponent';
+import {useNavigation} from '@react-navigation/native';
 
-const JobDetailScreen = (props, onAccept, navigation) => {
+const JobDetailScreen = (props, onAccept) => {
   const [deliveriesJobs, setDeliveriesJobs] = useState([]);
   const [headers, setHeaders] = useState(null);
+  const navigation = useNavigation();
 
   const printFun = () => {
     console.log(props.route.params.item.dropoffDetails);
@@ -43,35 +45,35 @@ const JobDetailScreen = (props, onAccept, navigation) => {
     if (deliveriesJobs.length === 0) fetchHeader();
   }, []);
 
-  // const acceptDeliveryHandler = item => {
-  //   api
-  //     .put(
-  //       AcceptDelivery,
-  //       {
-  //         delivery_id: props.route.params.item.id,
-  //         job_type: props.route.params.item.job_type,
-  //         pickup_time: props.route.params.item.pickup_time,
-  //         estimated_time: props.route.params.item.estimated_delivery_time,
-  //       },
-  //       {
-  //         headers: headers,
-  //       },
-  //     )
-  //     .then(response => {
-  //       removeJob(item.id);
-  //       console.log({response});
-  //       navigation.goBack();
-  //     })
-  //     .catch(error => {
-  //       console.log({error});
-  //     });
-  // };
+  const acceptDeliveryHandler = item => {
+    api
+      .put(
+        AcceptDelivery,
+        {
+          delivery_id: props.route.params.item.id,
+          job_type: props.route.params.item.job_type,
+          pickup_time: props.route.params.item.pickup_time,
+          estimated_time: props.route.params.item.estimated_delivery_time,
+        },
+        {
+          headers: headers,
+        },
+      )
+      .then(response => {
+        removeJob(props.route.params.item.id);
+        console.log({response});
+        navigation.goBack();
+      })
+      .catch(error => {
+        console.log({error});
+      });
+  };
 
-  // const removeJob = id => {
-  //   const newJob = [...deliveriesJobs];
-  //   const filteredJob = newJob.filter(job => job.id !== id);
-  //   setDeliveriesJobs(filteredJob);
-  // };
+  const removeJob = id => {
+    const newJob = [...deliveriesJobs];
+    const filteredJob = newJob.filter(job => job.id !== id);
+    setDeliveriesJobs(filteredJob);
+  };
 
   return (
     <ScrollView style={backgroundColor.container}>
@@ -241,7 +243,7 @@ const JobDetailScreen = (props, onAccept, navigation) => {
           onPress={() => {
             // onAccept();
             // // printFun();
-            // acceptDeliveryHandler();
+            acceptDeliveryHandler();
           }}>
           <Text style={styles.acceptButtonText}>ACCEPT</Text>
         </TouchableOpacity>

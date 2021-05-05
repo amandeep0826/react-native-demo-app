@@ -11,6 +11,8 @@ export const Transactions = 'driver/transaction';
 export const ContactUs = 'driver/contact-us';
 export const ChangePassword = 'change/password';
 export const DriverFeedBack = 'feedback';
+export const ImageBaseUrl = 'aws/file';
+export const ImageUpload = 'upload/aws';
 export const DeliveryManagement = 'delivery/management';
 export const DeliveriesByTime = 'driver/deliveries?status=1&sorting=2&page=1';
 export const Bookings = (status, sorting, offset) =>

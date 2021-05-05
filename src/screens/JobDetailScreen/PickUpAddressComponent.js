@@ -1,5 +1,5 @@
 import React from 'react';
-import {Image, Text, TouchableOpacity, View} from 'react-native';
+import {Image, Text, TouchableOpacity, View, Linking} from 'react-native';
 import {dashColor, primaryGreen, pureWhite} from '../../assets/colors';
 import {styles} from './style';
 import Dash from 'react-native-dash';
@@ -8,6 +8,17 @@ const PickUpAddressComponent = (
   {pickupAddress, user_name, user_phone, user_apartment, user_landmark},
   props,
 ) => {
+  const callHandler = () => {
+    let phoneNumber = '';
+
+    if (Platform.OS === 'android') {
+      phoneNumber = `tel:${user_phone}`;
+    } else {
+      phoneNumber = `telpromt:${user_phone}`;
+    }
+    Linking.openURL(phoneNumber);
+  };
+
   return (
     <View style={styles.pickUpContainer}>
       <View style={styles.pickupDotContainer}>
@@ -61,7 +72,11 @@ const PickUpAddressComponent = (
               source={require('../../assets/navigation.png')}
             />
           </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.7}>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => {
+              callHandler();
+            }}>
             <Image
               style={styles.callButton}
               source={require('../../assets/call.png')}

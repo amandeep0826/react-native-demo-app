@@ -20,6 +20,7 @@ import api, {
   ChangePassword,
   DriverProfile,
   getHeaders,
+  ImageUpload,
   UpdateDriverProfile,
 } from '../../api/api';
 import {
@@ -32,7 +33,7 @@ import {
   tertiarybackgroundColor,
 } from '../../assets/colors';
 import {NunitoFont} from '../../assets/fonts/nunitoFont';
-import {UserContext} from '../../routes/RootStackNavigation';
+import {AuthContext, UserContext} from '../../routes/RootStackNavigation';
 import {backgroundColor} from '../../styles/commonStyle';
 import NameCard from './ProfileDetailsCard';
 import {styles} from './styles';
@@ -41,6 +42,7 @@ const EditProfileScreen = ({navigation}) => {
   const [driverProfile, setDriverProfile] = useState('');
   const [headers, setHeaders] = useState(null);
   const [user, setUser] = useContext(UserContext);
+  const [token, setToken] = useContext(AuthContext);
   const [name, setName] = useState('');
   const [loading, setLoading] = useState(true);
   const [spinner, setSpinner] = useState(false);
@@ -50,6 +52,8 @@ const EditProfileScreen = ({navigation}) => {
   const [isModalVisible, setModalVisible] = useState(false);
   const [currentPassword, setCurrentPassword] = useState('');
   const [newPassword, setNewPassword] = useState('');
+  const [cameraImage, setCameraImage] = useState('');
+  const [imageFromGallery, setImageFromGallery] = useState('');
 
   const toggleModal = () => {
     setModalVisible(!isModalVisible);
@@ -77,23 +81,65 @@ const EditProfileScreen = ({navigation}) => {
     console.log(currentPassword, newPassword);
   };
 
-  const chooseFromPhone = () => {
-    ImagePicker.openPicker({
-      width: 300,
-      height: 400,
-      cropping: true,
-    }).then(image => {
-      console.log(image);
-    });
-  };
-
   const openCamera = () => {
     ImagePicker.openCamera({
       width: 300,
       height: 400,
       cropping: true,
-    }).then(image => {
-      console.log(image);
+    })
+      .then(image => {
+        const file = {
+          uri: image.path,
+          type: image.mime,
+          name: 'uploadImage',
+        };
+        sendRequest(file, token).then(response => {
+          UpdateProfilePicture(response.filename);
+        });
+      })
+      .catch(error => {
+        console.log('camera operation failed');
+      });
+  };
+
+  const chooseFromPhone = () => {
+    ImagePicker.openPicker({
+      width: 300,
+      height: 400,
+      cropping: true,
+    })
+      .then(image => {
+        const file = {
+          uri: image.path,
+          type: image.mime,
+          name: 'uploadImage',
+        };
+        sendRequest(file, token).then(response => {
+          console.log({response});
+          UpdateProfilePicture(response.filename);
+        });
+      })
+      .catch(error => {
+        console.log({error});
+      });
+  };
+
+  const sendRequest = async (file, token) => {
+    return new Promise((resolve, reject) => {
+      const req = new XMLHttpRequest();
+      req.upload.addEventListener('progress', async event => {});
+      req.onreadystatechange = async () => {
+        if (req.readyState === XMLHttpRequest.DONE) {
+          const response = JSON.parse(req.response);
+          console.log({response});
+          resolve(response);
+        }
+      };
+      const formData = new FormData();
+      formData.append('file', file, file.name);
+      req.open('POST', 'https://app-transfer.com:3001/api/upload/aws');
+      req.setRequestHeader('Authorization', token);
+      req.send(formData);
     });
   };
 
@@ -101,23 +147,34 @@ const EditProfileScreen = ({navigation}) => {
     const fetchHeader = async () => {
       const _headers = await getHeaders();
       setHeaders(_headers);
-      // getDriverProfileHandler(_headers);
     };
     if (driverProfile === '') fetchHeader();
   }, []);
 
-  // const getDriverProfileHandler = _headers => {
-  //   api
-  //     .get(DriverProfile, {
-  //       headers: _headers,
-  //     })
-  //     .then(response => {
-  //       setDriverProfile(response.data);
-  //     })
-  //     .catch(error => {
-  //       console.log({error});
-  //     });
-  // };
+  const UpdateProfilePicture = _image => {
+    let updateValue = {
+      profile_image: _image,
+    };
+    api
+      .put(UpdateDriverProfile, updateValue, {
+        headers: headers,
+      })
+      .then(response => {
+        AsyncStorage.getItem('user').then(user => {
+          user = JSON.parse(user);
+
+          user.user.profile_image = _image;
+          setUser(user);
+          AsyncStorage.setItem('user', JSON.stringify(user)).done();
+        });
+        console.log('Profile has been updated');
+      })
+      .catch(error => {
+        console.log({error});
+        console.log(_image);
+      });
+  };
+
   const UpdateName = name => {
     let updateValue = {
       name: name,
@@ -239,6 +296,34 @@ const EditProfileScreen = ({navigation}) => {
       return true;
     }
   };
+
+  const uploadImage = () => {
+    const data = new FormData();
+    data.append('name', imageFromGallery);
+    api
+      .post(
+        ImageUpload,
+        {data},
+        {
+          headers: {
+            accept: 'application/json',
+            Authorization: token,
+            'Content-Type': 'multipart/form-data',
+          },
+        },
+      )
+      .then(response => {
+        console.log('image upload successfull');
+      })
+      .catch(error => {
+        console.log('image upload failed');
+        console.log(imageFromGallery);
+      });
+  };
+
+  const profile_image = user.user.profile_image;
+  const ImageBaseUrl = `https://app-transfer.com:3002/api/aws/file?filename=${profile_image}`;
+  const ImageUploadBaseUrl = `https://app-transfer.com:3002/api/upload/aws?filename=${cameraImage}`;
 
   return (
     <ScrollView style={backgroundColor.container}>
@@ -430,8 +515,7 @@ const EditProfileScreen = ({navigation}) => {
               alignSelf: 'center',
             }}
             source={{
-              uri:
-                'https://ca.slack-edge.com/TC9LHABTP-U01J3U0JKHS-129560ba72fa-192',
+              uri: ImageBaseUrl,
             }}
           />
           <TouchableOpacity

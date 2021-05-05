@@ -1,5 +1,12 @@
 import React from 'react';
-import {Button, Image, Text, TouchableOpacity, View} from 'react-native';
+import {
+  Button,
+  Image,
+  Text,
+  TouchableOpacity,
+  View,
+  Linking,
+} from 'react-native';
 import {
   dashColor,
   primaryDarkBlue,
@@ -12,6 +19,17 @@ import Dash from 'react-native-dash';
 const DropOffAddressComponent = ({item, index, showDash}) => {
   const printDetails = () => {
     console.log({item});
+  };
+
+  const callHandler = () => {
+    let phoneNumber = '';
+
+    if (Platform.OS === 'android') {
+      phoneNumber = `tel:${item.user_name}`;
+    } else {
+      phoneNumber = `telpromt:${item.user_name}`;
+    }
+    Linking.openURL(phoneNumber);
   };
 
   return (
@@ -66,7 +84,11 @@ const DropOffAddressComponent = ({item, index, showDash}) => {
               source={require('../../assets/navigation.png')}
             />
           </TouchableOpacity>
-          <TouchableOpacity activeOpacity={0.7}>
+          <TouchableOpacity
+            activeOpacity={0.7}
+            onPress={() => {
+              callHandler();
+            }}>
             <Image
               style={styles.callButton}
               source={require('../../assets/call.png')}

@@ -18,6 +18,7 @@ import EditProfileScreen from '../screens/EditProfileScreen';
 import OTPScreen from '../screens/EditProfileScreen/otpScreen';
 import ForgotPassword from '../screens/ForgotPasswordScreen/index';
 import JobDetailScreen from '../screens/JobDetailScreen';
+import MapsView from '../screens/JobDetailScreen/MapView';
 import SplashScreenScreen from '../screens/SplashScreen/index';
 import WalletDetailScreen from '../screens/WalletScreen/WalletDetailScreen';
 import TabNavigation from './TabNavigation';
@@ -210,6 +211,23 @@ const RootStackNavigation = ({navigation}) => {
               <Stack.Screen
                 name="WalletDetailScreen"
                 component={WalletDetailScreen}
+                options={{
+                  headerShown: true,
+                  headerTitle: 'Transactions',
+                  headerTitleAlign: 'center',
+                  headerTitleStyle: {
+                    fontFamily: NunitoFont,
+                    fontSize: 16,
+                    fontWeight: 'bold',
+                  },
+                  headerStyle: {
+                    backgroundColor: secondarybackgroundColor,
+                  },
+                }}
+              />
+              <Stack.Screen
+                name="MapsView"
+                component={MapsView}
                 options={{
                   headerShown: true,
                   headerTitle: 'Transactions',

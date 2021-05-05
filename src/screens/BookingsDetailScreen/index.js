@@ -1,4 +1,4 @@
-import React, {useEffect, useState} from 'react';
+import React, {useEffect, useState, useContext} from 'react';
 import {useNavigation} from '@react-navigation/native';
 import {
   ActivityIndicator,
@@ -41,6 +41,7 @@ import DropOffAddressComponent from '../JobDetailScreen/DropOffAddressComponent'
 import PickUpAddressComponent from '../JobDetailScreen/PickUpAddressComponent';
 import ReturnDeliveryAddressComponent from '../JobDetailScreen/ReturnDeliveryAddressComponent';
 import SingleDropOffAddressComponent from '../JobDetailScreen/SingleDropOffAddressComponent';
+import {AuthContext} from '../../routes/RootStackNavigation';
 
 const BookingsDetailScreen = (props, {route}) => {
   const [deliveriesJobs, setDeliveriesJobs] = useState([]);
@@ -49,13 +50,13 @@ const BookingsDetailScreen = (props, {route}) => {
   const dropDownOptions = ['Package Delivered', 'Delivery Failure'];
   const [spinner, setSpinner] = useState(false);
   const [isModalVisible, setModalVisible] = useState(false);
-  const [selected, setSelected] = useState();
+  const [token, setToken] = useContext(AuthContext);
   const navigation = useNavigation();
   const [selectedReason, setSelectedReason] = useState(1);
+  const [packageImage, setPackageImage] = useState(false);
+  const [imageUrl, setImageUrl] = useState('');
 
   const {item} = props.route.params;
-
-  const options = ['Apple', 'Banana', 'Orange'];
 
   const printFun = () => {
     console.log(props.route.params.item.dropoffDetails);
@@ -71,14 +72,51 @@ const BookingsDetailScreen = (props, {route}) => {
     setModalVisible(!isModalVisible);
   };
 
+  const sendRequest = async (file, token) => {
+    return new Promise((resolve, reject) => {
+      const req = new XMLHttpRequest();
+      req.upload.addEventListener('progress', async event => {});
+      req.onreadystatechange = async () => {
+        if (req.readyState === XMLHttpRequest.DONE) {
+          const response = JSON.parse(req.response);
+          // console.log({response});
+          resolve(response);
+        }
+      };
+      const formData = new FormData();
+      formData.append('file', file, file.name);
+      req.open('POST', 'https://app-transfer.com:3001/api/upload/aws');
+      req.setRequestHeader('Authorization', token);
+      req.send(formData);
+    });
+  };
+
   const openCamera = () => {
     ImagePicker.openCamera({
       width: 300,
       height: 400,
       cropping: true,
-    }).then(image => {
-      console.log(image);
-    });
+    })
+      .then(image => {
+        const file = {
+          uri: image.path,
+          type: image.mime,
+          name: 'uploadImage',
+        };
+        sendRequest(file, token).then(response => {
+          imageUrlHandler(response.filename);
+          setPackageImage(true);
+          // console.log('image upload successfull');
+        });
+      })
+      .catch(error => {
+        // console.log('camera operation failed');
+      });
+  };
+
+  const imageUrlHandler = imageName => {
+    const ImageBaseUrl = `https://app-transfer.com:3001/api/aws/file?filename=${imageName}`;
+    setImageUrl(ImageBaseUrl);
   };
 
   useEffect(() => {
@@ -138,6 +176,7 @@ const BookingsDetailScreen = (props, {route}) => {
         console.log({error});
       });
   };
+
   return (
     <ScrollView style={backgroundColor.container}>
       <Spinner
@@ -540,15 +579,28 @@ const BookingsDetailScreen = (props, {route}) => {
                 onPress={() => {
                   openCamera();
                 }}>
-                <Image
-                  style={{
-                    height: 45,
-                    width: 45,
-                    alignSelf: 'center',
-                    marginTop: 45,
-                  }}
-                  source={require('../../assets/add_photo.png')}
-                />
+                {packageImage == false ? (
+                  <Image
+                    style={{
+                      height: 45,
+                      width: 45,
+                      alignSelf: 'center',
+                      marginTop: 45,
+                    }}
+                    source={require('../../assets/add_photo.png')}
+                  />
+                ) : (
+                  <Image
+                    style={{
+                      height: 100,
+                      width: 100,
+                      alignSelf: 'center',
+                      justifyContent: 'center',
+                      marginTop: 20,
+                    }}
+                    source={{uri: imageUrl}}
+                  />
+                )}
               </TouchableOpacity>
             </View>
             <View
@@ -763,33 +815,6 @@ const BookingsDetailScreen = (props, {route}) => {
           </View>
         </Modal>
       )}
-      {/* <SelectPicker
-        onValueChang={value => {
-          setSelected(value);
-        }}
-        selected={selected}>
-        <SelectPicker.Item label="Client Refused" value="client refused" />
-        <SelectPicker.Item label="Client Refused" value="client refused" />
-        <SelectPicker.Item label="Client Refused" value="client refused" />
-        <SelectPicker.Item label="Client Refused" value="client refused" />
-        <SelectPicker.Item label="Client Refused" value="client refused" />
-      </SelectPicker> */}
-      {/* <View style={styles.deliveryStatusContainer}>
-        <Text style={styles.deliveryStatusText}>Delivery Status</Text>
-        <View style={styles.statusDropDownContainer}>
-          <ModalDropdown
-            options={['Package Delivered', 'Delivery Failure']}
-            onSelect={() => {
-              alert('Hi');
-            }}
-            defaultValue="Update Status"
-            style={styles.modalStyle}
-            dropdownStyle={styles.dropdownStyle}
-            dropdownTextStyle={styles.dropdownTextStyle}
-            textStyle={styles.TextStyle}
-          />
-        </View>
-      </View> */}
     </ScrollView>
   );
 };

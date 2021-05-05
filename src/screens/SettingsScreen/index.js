@@ -15,6 +15,7 @@ import api, {
   ContactUs,
   DriverProfile,
   getHeaders,
+  ImageBaseUrl,
   removeToken,
 } from '../../api/api';
 import {secondarybackgroundColor} from '../../assets/colors';
@@ -52,13 +53,8 @@ const SettingsScreen = ({navigation, driveData}) => {
   //     });
   // };
 
-  // const profileImageHandler = () => {
-  //   setProfileImage(user.user.profile_image);
-  //   // console.log(profileImage);
-  // };
-
-  // let image = user.user.profile_image;
-  // // console.log(image);
+  const profile_image = user.user.profile_image;
+  const ImageBaseUrl = `https://app-transfer.com:3001/api/aws/file?filename=${profile_image}`;
 
   const logOut = async () => {
     try {
@@ -100,13 +96,13 @@ const SettingsScreen = ({navigation, driveData}) => {
             marginTop: 30,
             alignSelf: 'center',
           }}
-          // source={{
-          //   uri: `https://app-transfer.com:3001/api-docs//Driver/driverLogin/${image}`,
-          // }}
           source={{
-            uri:
-              'https://ca.slack-edge.com/TC9LHABTP-U01J3U0JKHS-129560ba72fa-192',
+            uri: ImageBaseUrl,
           }}
+          // source={{
+          //   uri:
+          //     'https://ca.slack-edge.com/TC9LHABTP-U01J3U0JKHS-129560ba72fa-192',
+          // }}
         />
         <View style={styles.editNameContainer}>
           <Text style={styles.name}>{user.user.name}</Text>
